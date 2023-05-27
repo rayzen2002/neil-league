@@ -1,12 +1,10 @@
 import Header from '@/components/Header'
 import './globals.css'
 import {
-  Inter,
   Roboto_Flex as Roboto,
   Bai_Jamjuree as BaiJamjuree,
 } from 'next/font/google'
 import { Crown, Gamepad2, Skull, Swords } from 'lucide-react'
-const inter = Inter({ subsets: ['latin'] })
 
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' })
 const baiJamjuree = BaiJamjuree({

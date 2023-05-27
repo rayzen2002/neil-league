@@ -1,3 +1,3 @@
 export default function Arena() {
-  return <h1>Arena!!</h1>;
+  return <h1>Arena!!</h1>
 }
