@@ -1,3 +1,5 @@
+import { Players } from '@/components/Players'
+
 export default function Jogadores() {
-  return <h1>Hi</h1>
+  return <Players />
 }
