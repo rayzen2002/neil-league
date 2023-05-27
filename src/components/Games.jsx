@@ -1,7 +1,8 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
+
 export const Games = async () => {
-  let games = [] // Declare and initialize the games variable
+  let games = []
 
   try {
     const res = await fetch(
@@ -16,8 +17,7 @@ export const Games = async () => {
         },
       },
     )
-    games = await res.json() // Assign fetched data to games variable
-    console.log(games)
+    games = await res.json()
   } catch (error) {
     console.error(error)
   }
@@ -38,33 +38,35 @@ export const Games = async () => {
               return (
                 <li
                   key={match.id}
-                  className="m-auto  mt-4  flex w-2/4 flex-col items-center justify-center gap-y-2 rounded-xl border-4  bg-blitz-400 pb-6"
+                  className="m-auto mt-4 flex w-2/4 flex-col items-center justify-center gap-y-2 rounded-xl border-4 bg-blitz-400 pb-6"
                 >
-                  <h1 className="flex gap-6 pt-8 text-3xl font-bold ">
-                    <div className="flex items-end gap-6   ">
+                  <h1 className="flex gap-6 pt-8 text-3xl font-bold">
+                    <div className="flex items-end gap-6">
                       <span
                         className={
-                          match.results.winner === 'faction1'
-                            ? ' flex flex-col items-center  justify-center  '
+                          match.results && match.results.winner === 'faction1'
+                            ? 'flex flex-col items-center justify-center'
                             : ''
                         }
                       >
-                        {match.results.winner === 'faction1' && (
-                          <Crown style={{ color: 'red' }} />
-                        )}
+                        {match.results &&
+                          match.results.winner === 'faction1' && (
+                            <Crown style={{ color: 'red' }} />
+                          )}
                         {teamA}
                       </span>
-                      <span className=" ">Vs</span>
+                      <span className="">Vs</span>
                       <span
                         className={
-                          match.results.winner === 'faction2'
-                            ? 'flex flex-col items-center justify-center   '
+                          match.results && match.results.winner === 'faction2'
+                            ? 'flex flex-col items-center justify-center'
                             : ''
                         }
                       >
-                        {match.results.winner === 'faction2' && (
-                          <Crown style={{ color: 'red' }} />
-                        )}
+                        {match.results &&
+                          match.results.winner === 'faction2' && (
+                            <Crown style={{ color: 'red' }} />
+                          )}
                         {teamB}
                       </span>
                     </div>

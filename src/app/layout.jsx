@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
                 </div>
                 <div className="flex w-full  gap-6 hover:bg-orange-500">
                   <Crown />
-                  <a href="/leaderboard" className=" ">
+                  <a href="/leaderboards" className=" ">
                     Leaderboard
                   </a>
                 </div>

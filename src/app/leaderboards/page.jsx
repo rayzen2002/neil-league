@@ -1,5 +1,5 @@
-import { LeaderboardsComponent } from '@/components/LeaderboardComponent'
+import { LeaderboardComponent } from '@/components/LeaderboardComponent'
 
-export default function Leaderboards() {
-  return <LeaderboardsComponent />
+export default async function Leaderboards() {
+  return <LeaderboardComponent />
 }
