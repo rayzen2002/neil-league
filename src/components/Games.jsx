@@ -5,10 +5,10 @@ export const Games = async () => {
 
   try {
     const res = await fetch(
-      `https://open.faceit.com/data/v4/hubs/${process.env.HUB_ID}/matches?limit=50`,
+      `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=50`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
           Accept: 'application/json',
         },
         next: {
