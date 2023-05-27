@@ -87,6 +87,7 @@
     "dotenv": "tune"
   },
   "typescript.updateImportsOnFileMove.enabled": "never",
+  
   "material-icon-theme.files.associations": {
     "tsconfig.json": "tune",
     "*.webpack.js": "webpack",
@@ -213,12 +214,5 @@
   },
   "window.commandCenter": true,
   "git.openRepositoryInParentFolders": "always",
-  "window.zoomLevel": 1,
-  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-  "editor.formatOnPaste": false, // required 
-  "editor.formatOnType": false, // required
-  "editor.formatOnSave": true, // optional 
-  "editor.formatOnSaveMode": "file", // required to format on save
-  "files.autoSave": "onFocusChange", // optional but recommended
-  "vs-code-prettier-eslint.prettierLast": "false" // set as "true" to run 'prettier' last not first
+  "window.zoomLevel": 1
 }

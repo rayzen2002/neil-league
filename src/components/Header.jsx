@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function Header() {
   return (
-    <div className="a flex h-28 w-full items-center justify-between gap-4 bg-blitz-100  font-alt font-bold">
+    <div className="a flex h-28 w-full  items-center justify-between gap-4 bg-blitz-100  font-alt font-bold">
       <div className="flex items-center gap-20">
         {/* Botao de Login */}
         <a
