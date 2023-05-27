@@ -1,6 +1,5 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
-
 export const Games = async () => {
   let games = [] // Declare and initialize the games variable
 
@@ -11,6 +10,9 @@ export const Games = async () => {
         headers: {
           Authorization: `Bearer ${process.env.API_KEY}`,
           Accept: 'application/json',
+        },
+        next: {
+          revalidate: 30,
         },
       },
     )
