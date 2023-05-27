@@ -1,5 +1,5 @@
 import { Games } from '@/components/Games'
 
-export default async function Jogos() {
+export default function Jogos() {
   return <Games />
 }
