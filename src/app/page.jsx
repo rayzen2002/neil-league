@@ -1,20 +1,17 @@
-import Header from "@/components/Header";
-import Image from "next/image";
-
 export default function Home() {
   return (
     <div className="mt-16 h-[500] w-full bg-blitz-100 px-6">
       <h1 className="py-16 text-center font-alt text-5xl font-bold leading-snug">
-        Seja bem-vindo ao site da{" "}
+        Seja bem-vindo ao site da{' '}
         <a
           href="https://www.faceit.com/en/hub/63ff8232-ec1b-4b18-86c1-1bd131288be1/NEIL%20-%20Nordeste%20Inhouse%20League"
           className="text-orange-500"
         >
-          NEIL{" "}
-        </a>{" "}
+          NEIL{' '}
+        </a>{' '}
         Inhouse League!
       </h1>
-      <p className=" px-28 pb-20 text-center text-start font-sans text-xl leading-relaxed">
+      <p className=" px-28 pb-20 text-center  font-sans text-xl leading-relaxed">
         Somos uma liga de Dota 2 que começou como uma brincadeira entre amigos,
         mas rapidamente se tornou a forma mais divertida de jogar Dota.
         <br /> Ao longo dos anos, nos tornamos a liga mais duradoura de Dota 2
@@ -38,5 +35,5 @@ export default function Home() {
         proporcionar momentos inesquecíveis! Divirta-se e boa sorte!
       </p>
     </div>
-  );
+  )
 }

@@ -1,24 +1,24 @@
-import Header from "@/components/Header";
-import "./globals.css";
-import { Inter } from "next/font/google";
+import Header from '@/components/Header'
+import './globals.css'
 import {
+  Inter,
   Roboto_Flex as Roboto,
   Bai_Jamjuree as BaiJamjuree,
-} from "next/font/google";
-import { Crown, Gamepad2, Skull, Swords } from "lucide-react";
-const inter = Inter({ subsets: ["latin"] });
+} from 'next/font/google'
+import { Crown, Gamepad2, Skull, Swords } from 'lucide-react'
+const inter = Inter({ subsets: ['latin'] })
 
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-roboto" });
+const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' })
 const baiJamjuree = BaiJamjuree({
-  subsets: ["latin"],
-  weight: "700",
-  variable: "--font-bai-jamjuree",
-});
+  subsets: ['latin'],
+  weight: '700',
+  variable: '--font-bai-jamjuree',
+})
 
 export const metadata = {
-  title: "NEIL",
-  description: "Neil Inhouse League",
-};
+  title: 'NEIL',
+  description: 'Neil Inhouse League',
+}
 
 export default function RootLayout({ children }) {
   return (
@@ -66,5 +66,5 @@ export default function RootLayout({ children }) {
         </main>
       </body>
     </html>
-  );
+  )
 }

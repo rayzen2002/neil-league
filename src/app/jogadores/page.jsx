@@ -1,3 +1,3 @@
 export default function Jogadores() {
-  return <h1>Jogadores!</h1>;
+  return <h1>Hi</h1>
 }

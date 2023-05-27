@@ -1,5 +1,5 @@
-import { Home, User } from "lucide-react";
-import Image from "next/image";
+import { Home, User } from 'lucide-react'
+import Image from 'next/image'
 
 export default function Header() {
   return (
@@ -32,7 +32,8 @@ export default function Header() {
         width={75}
         height={75}
         className="mx-4 rounded-full "
+        alt="Neil"
       />
     </div>
-  );
+  )
 }

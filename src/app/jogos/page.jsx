@@ -1,3 +1,5 @@
-export default function Jogos() {
-  return <h1>Jogos</h1>;
+import { Games } from '@/components/Games'
+
+export default async function Jogos() {
+  return <Games />
 }
