@@ -3,10 +3,10 @@ import { Crown } from 'lucide-react'
 
 export const Games = async () => {
   const res = await fetch(
-    `https://open.faceit.com/data/v4/hubs/63ff8232-ec1b-4b18-86c1-1bd131288be1/matches?limit=100`,
+    `https://open.faceit.com/data/v4/hubs/${process.env.HUB_ID}/matches?limit=100`,
     {
       headers: {
-        Authorization: `Bearer f5fd0768-5cc8-4949-af4c-b7ff1e0b1d01`,
+        Authorization: `Bearer ${process.env.API_KEY}`,
         Accept: 'application/json',
       },
     },
