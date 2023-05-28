@@ -1,13 +1,15 @@
 import { Home, User } from 'lucide-react'
 import Image from 'next/image'
-
+// Key: 4232E26F272E6133D6396BBB6973B86E
+// https://steamcommunity.com/oauth/login?response_type=token&client_id=client_id_here&state=whatever_you_want
+// https://accounts.faceit.com/error
 export default function Header() {
   return (
     <div className="a flex h-28 w-full  items-center justify-between gap-4 bg-blitz-100  font-alt font-bold">
       <div className="flex items-center gap-20">
         {/* Botao de Login */}
         <a
-          href="*"
+          href={`https://cdn.faceit.com/widgets/sso/index.html?response_type=code&client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_popup=true`}
           className="text-zinc-100 flex items-center gap-3 px-4 pt-5 text-left transition-colors "
         >
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-400 ">
