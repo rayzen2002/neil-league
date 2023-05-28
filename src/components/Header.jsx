@@ -27,13 +27,22 @@ export default function Header() {
           </a>
         </div>
       </div>
-      <Image
-        src="/neil.jpeg"
-        width={75}
-        height={75}
-        className="mx-4 rounded-full "
-        alt="Neil"
-      />
+      <div className="mr-12 flex flex-col items-center">
+        <Image
+          src="/neil.svg"
+          width={36 * 4}
+          height={100}
+          alt="Neil hat"
+          className="text-orange-500"
+        />
+        <Image
+          src="/logo.svg"
+          width={32 * 4}
+          height={80}
+          className="  "
+          alt="Neil"
+        />
+      </div>
     </div>
   )
 }
