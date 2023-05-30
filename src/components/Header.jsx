@@ -29,18 +29,18 @@ export default function Header() {
           </a>
         </div>
       </div>
-      <div className="mr-12 flex flex-col items-center">
+      <div className="mr-12 flex  flex-col items-center p-12">
         <Image
           src="/neil.svg"
           width={36 * 4}
-          height={100}
+          height={38.0938}
           alt="Neil hat"
           className="text-orange-500"
         />
         <Image
           src="/logo.svg"
           width={32 * 4}
-          height={80}
+          height={75.25}
           className="  "
           alt="Neil"
         />
