@@ -1,8 +1,6 @@
 import { Home, User } from 'lucide-react'
 import Image from 'next/image'
-// Key: 4232E26F272E6133D6396BBB6973B86E
-// https://steamcommunity.com/oauth/login?response_type=token&client_id=client_id_here&state=whatever_you_want
-// https://accounts.faceit.com/error
+
 export default function Header() {
   return (
     <div className="a flex h-28 w-full  items-center justify-between gap-4 bg-blitz-100  font-alt font-bold">
