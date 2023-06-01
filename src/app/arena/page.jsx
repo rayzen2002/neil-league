@@ -1,5 +1,5 @@
 'use client'
-import { SwordsIcon } from 'lucide-react'
+import { Crown, Skull, SwordsIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export default function Arena() {
@@ -7,9 +7,12 @@ export default function Arena() {
   const [inputB, setInputB] = useState('')
   const [playerDataA, setPlayerDataA] = useState('')
   const [playerDataB, setPlayerDataB] = useState('')
+  const [enemyName, setEnemyName] = useState('')
+  const [name, setName] = useState('')
   const [win, setWin] = useState(0)
   const [lose, setLose] = useState(0)
-  const [showDuel, setShowDuel] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isDataFetched, setIsDataFetched] = useState(false)
 
   const [players, setPlayers] = useState([])
 
@@ -59,24 +62,37 @@ export default function Arena() {
   const handleInputBChange = (e) => {
     setInputB(e.target.value)
   }
-  const createDuel = () => {
-    setShowDuel(!showDuel)
-  }
+
   const duelButtonHandle = () => {
-    handleButton()
-    createDuel()
+    if (!isDataFetched && !isLoading) {
+      setIsLoading(true)
+      handleButton()
+    } else if (isDataFetched) {
+      // Reset the data and fetch again when inputs are changed
+      setWin(0)
+      setLose(0)
+      setIsDataFetched(false)
+      setIsLoading(true)
+      handleButton()
+    }
   }
+
   const handleButton = () => {
+    const lowercaseInputA = inputA.toLowerCase()
+    const lowercaseInputB = inputB.toLowerCase()
+    setEnemyName(inputB.toUpperCase())
+    setName(inputA.toUpperCase())
+
     // playerA data fetching
     if (
       players.some(
-        (player) => player.nickname.toLowerCase() === inputA.toLowerCase(),
+        (player) => player.nickname.toLowerCase() === lowercaseInputA,
       )
     ) {
-      const playerA = players.filter((player) => player.nickname === inputA)
-      const playerAFaceitId = playerA.map((player) => {
-        return player.user_id
-      })
+      const playerA = players.filter(
+        (player) => player.nickname.toLowerCase() === lowercaseInputA,
+      )
+      const playerAFaceitId = playerA.map((player) => player.user_id)
       console.log(playerAFaceitId)
 
       fetch(`https://open.faceit.com/data/v4/players/${playerAFaceitId}`, {
@@ -93,47 +109,47 @@ export default function Arena() {
     } else {
       alert(`Jogador: ${inputA} nao encontrado`)
       setInputA('')
+      setIsLoading(false)
+      setWin(0)
+      setLose(0)
+      setIsDataFetched(false)
+      setPlayerDataA('')
     }
+
     // playerB data fetching
     if (
       players.some(
-        (player) => player.nickname.toLowerCase() === inputB.toLowerCase(),
+        (player) => player.nickname.toLowerCase() === lowercaseInputB,
       )
     ) {
-      // playerB
-      if (
-        players.some(
-          (player) => player.nickname.toLowerCase() === inputB.toLowerCase(),
-        )
-      ) {
-        const playerB = players.filter((player) => player.nickname === inputB)
-        const playerBFaceitId = playerB.map((player) => {
-          return player.user_id
-        })
-        console.log(playerBFaceitId)
+      const playerB = players.filter(
+        (player) => player.nickname.toLowerCase() === lowercaseInputB,
+      )
+      const playerBFaceitId = playerB.map((player) => player.user_id)
+      console.log(playerBFaceitId)
 
-        fetch(`https://open.faceit.com/data/v4/players/${playerBFaceitId}`, {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-            Accept: 'application/json',
-          },
+      fetch(`https://open.faceit.com/data/v4/players/${playerBFaceitId}`, {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+          Accept: 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPlayerDataB(data.steam_id_64)
+          console.log(playerDataB)
         })
-          .then((res) => res.json())
-          .then((data) => {
-            setPlayerDataB(data.steam_id_64)
-            console.log(playerDataB)
-          })
-
-        console.log(playerB)
-      } else {
-        alert(`Jogador: ${inputB} nao encontrado`)
-        setInputB('')
-      }
     } else {
       alert(`Jogador: ${inputB} nao encontrado`)
       setInputB('')
+      setIsLoading(false)
+      setWin(0)
+      setLose(0)
+      setIsDataFetched(false)
+      setPlayerDataB('')
     }
   }
+
   useEffect(() => {
     if (playerDataA && playerDataB) {
       const steamA = convertSteam64ToSteam32(playerDataA)
@@ -156,26 +172,30 @@ export default function Arena() {
             }
             return count
           }, 0)
-          setLose(data.length - win)
-          console.log(data.length)
+
           setWin(winCount)
-          console.log(winCount)
+          if (winCount > 0) {
+            setLose(data.length - winCount)
+          }
+          setIsDataFetched(true)
         })
         .catch((error) => {
           console.error(`Error fetching matches data: ${error}`)
         })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
-  }, [playerDataA, playerDataB])
+  }, [playerDataA, playerDataB, isDataFetched])
   console.log(`Ganhou: ${win} Perdeu: ${lose}`)
 
   return (
     <div className="flex flex-col">
       <div className="m-auto mt-14 flex h-2/5 w-2/3 flex-col rounded-xl border-4 border-blitz-200 bg-blitz-400">
-        <div className="mx-auto  my-4 flex items-center justify-center">
-          <SwordsIcon className="h-28 w-28" />
-          <h1 className="mt-4  text-center text-5xl " style={{ color: 'red' }}>
-            Arena
-          </h1>
+        <div className="mx-auto  my-4 flex items-center justify-center gap-8">
+          <SwordsIcon className="h-28 w-28 " />
+          <h1 className="mt-4  text-center text-6xl font-bold">Arena</h1>
+          <SwordsIcon className="h-28 w-28 " />
         </div>
         <p className="mb-8 px-28 text-2xl">
           Desafie seus amigos e mostre suas verdadeiras conquistas! Cansado de
@@ -187,16 +207,14 @@ export default function Arena() {
         </p>
       </div>
       <div className="mt-14 flex items-center justify-center gap-4">
-        <span className="text-xl text-green-600">Digite seu nick: </span>
+        <span className="text-2xl ">Digite seu nick: </span>
         <input
           onChange={handleInputAChange}
           value={inputA}
           type="text"
           className="rounded-full px-4 text-blitz-200"
         />
-        <span className="text-xl text-orange-500">
-          Digite nick do ditocujo:{' '}
-        </span>
+        <span className="text-2xl ">Digite nick do ditocujo: </span>
         <input
           onChange={handleInputBChange}
           value={inputB}
@@ -206,16 +224,85 @@ export default function Arena() {
       </div>
       <button
         onClick={duelButtonHandle}
-        className=" mx-auto  mt-12 w-36  rounded-lg bg-orange-500 p-4 text-3xl font-bold leading-snug text-blitz-200 hover:bg-red-200"
+        className=" mx-auto  mt-12   w-96  bg-green-800 p-4 text-3xl font-bold leading-snug text-gray-50 hover:bg-red-200"
       >
-        DUELAR
+        {isLoading ? 'LOADING ...' : 'FIND MATCH'}
       </button>
-      {showDuel && win > 0 && (
-        <div className="mx-auto mt-12 flex flex-col">
-          <h1 className="text-4xl font-bold text-gray-100">Resultado</h1>
-          <p className="text-green-500">Ganhou: {win}</p>
-          <p className="text-red-200">Perdeu: {lose}</p>
-          <p>Winrate : {((win / (win + lose)) * 100).toFixed(2)} %</p>
+      {isDataFetched && (
+        <div className="mx-auto mb-28 mt-12 flex h-full w-2/3 flex-col items-center justify-center rounded-lg border-blitz-400 bg-blitz-400 p-4">
+          <div className="text-4xl font-bold text-gray-100 ">
+            {(win / (win + lose)) * 100 >= 50 ? (
+              <>
+                <div className=" flex flex-col items-center gap-4 text-center text-4xl">
+                  <div className="flex justify-center gap-4 ">
+                    <div className="flex flex-col items-center ">
+                      <Crown className="text-green-700" />
+                      <span className="text-green-700">{`${name}`}</span>
+                    </div>
+                    <span className="flex items-end"> Espancou </span>
+                    <div className="flex flex-col items-center">
+                      <Skull className="text-red-200" />
+                      <span className="text-red-200">{`${enemyName} `}</span>
+                    </div>
+                  </div>
+                  <div className="mb-4 flex flex-col gap-4">
+                    <span className="flex justify-center text-4xl">
+                      na Arena
+                    </span>
+                  </div>
+                  <div className="mx-auto flex w-full flex-col ">
+                    <p className="text-2xl text-green-500">
+                      Ganhou {win} partidas
+                    </p>
+                    <p className="text-2xl text-red-200">e Perdeu {lose} </p>
+                    <p className="text-bold text-3xl text-green-500">
+                      Winrate = {((win / (win + lose)) * 100).toFixed(2)} %
+                    </p>
+                  </div>
+                  <span className="mt-4 flex h-20 items-center justify-center border-4 border-blitz-200 bg-blitz-200 p-11 text-2xl">
+                    A vitória na Arena é o doce triunfo sobre o inimigo
+                    derrotado, uma conquista para compartilhar com os amigos e
+                    celebrar juntos.
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className=" flex flex-col items-center gap-4 text-center text-4xl">
+                  <div className="flex justify-center gap-4 ">
+                    <div className="flex flex-col items-center ">
+                      <Crown className="text-green-700" />
+                      <span className="text-green-700">{`${enemyName}`}</span>
+                    </div>
+                    <span className="flex items-end"> Espancou </span>
+                    <div className="flex flex-col items-center">
+                      <Skull className="text-red-200" />
+                      <span className="text-red-200">{`${name} `}</span>
+                    </div>
+                  </div>
+                  <div className="mb-4 flex flex-col gap-4">
+                    <span className="flex justify-center text-4xl">
+                      na Arena
+                    </span>
+                  </div>
+                  <div className="mx-auto flex w-full flex-col ">
+                    <p className="text-2xl text-green-500">
+                      Ganhou {win} partidas
+                    </p>
+                    <p className="text-2xl text-red-200">e Perdeu {lose} </p>
+                    <p className="text-bold text-3xl text-green-500">
+                      Winrate = {((win / (win + lose)) * 100).toFixed(2)} %
+                    </p>
+                  </div>
+                  <span className="mt-4 flex h-20 items-center justify-center border-4 border-blitz-200 bg-blitz-200 p-11 text-2xl">
+                    A derrota na Arena é o doce triunfo sobre o inimigo
+                    vencedor, uma conquista para compartilhar com os amigos e
+                    celebrar juntos.
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
