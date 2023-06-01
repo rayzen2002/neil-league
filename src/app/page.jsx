@@ -13,13 +13,12 @@ export default function Home() {
       </h1>
       <p className=" px-28 pb-20 text-center  font-sans text-xl leading-relaxed">
         Somos uma liga de Dota 2 que começou como uma brincadeira entre amigos,
-        mas rapidamente se tornou a forma mais divertida de jogar Dota.
-        <br /> Ao longo dos anos, nos tornamos a liga mais duradoura de Dota 2
-        do mundo, com 12 temporadas já concluídas e atualmente na emocionante
-        13ª temporada. Nossa jornada tem sido incrível, e estamos orgulhosos de
-        ter construído uma comunidade apaixonada ao redor do contexto da NEIL. O
-        que antes era exclusivo da Paraíba, agora abrange jogadores de todo o
-        Brasil. <br />
+        mas rapidamente se tornou a forma mais divertida de jogar Dota. Ao longo
+        dos anos, nos tornamos a liga mais duradoura de Dota 2 do mundo, com 12
+        temporadas já concluídas e atualmente na emocionante 13ª temporada.
+        Nossa jornada tem sido incrível, e estamos orgulhosos de ter construído
+        uma comunidade apaixonada ao redor do contexto da NEIL. O que antes era
+        exclusivo da Paraíba, agora abrange jogadores de todo o Brasil. <br />
         Estamos emocionados em ver como a liga cresceu e se tornou uma
         verdadeira celebração do Dota 2. Para tornar tudo ainda mais
         emocionante, oferecemos premiações mensais para os participantes,
