@@ -12,10 +12,6 @@ app.register(cors, {
 app.register(jwt, {
   secret: 'zolomonnajkndjksdnkajd',
 })
-app
-  .listen({
-    port: 3333,
-  })
-  .then(() => {
-    console.log('🚀 HTTP server running on http://localhost:3333')
-  })
+app.listen(() => {
+  console.log('🚀 HTTP server running on https://neildota.vercel.app/')
+})
