@@ -21,6 +21,8 @@ export async function GET(request) {
     'Content-Type': 'application/x-www-form-urlencoded',
   }
   console.log(code)
+  console.log(headers)
+  console.log(base64Credentials)
   try {
     const registerResponse = await axios.post(
       'https://api.faceit.com/auth/v1/oauth/token',
@@ -42,6 +44,7 @@ export async function GET(request) {
     // })
     return playerData
   } catch (error) {
+    console.error(error)
     return error.data
   }
 }
