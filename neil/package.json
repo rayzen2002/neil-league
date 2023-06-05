@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "vercel-build": "npx prisma migrate deploy",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@fastify/jwt": "^7.0.0",
+    "@prisma/client": "^4.15.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
@@ -30,6 +32,7 @@
     "@rocketseat/eslint-config": "^1.2.0",
     "dotenv": "^16.1.0",
     "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "prisma": "^4.15.0"
   }
 }
