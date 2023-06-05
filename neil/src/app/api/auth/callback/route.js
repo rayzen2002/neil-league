@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { api } from '@/lib/api'
 import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
+import axios from 'axios'
 export async function GET(request) {
   console.log(`oi`)
   const { searchParams } = new URL(request.url)
@@ -22,7 +22,7 @@ export async function GET(request) {
   }
   console.log(code)
   try {
-    const registerResponse = await api.post(
+    const registerResponse = await axios.post(
       'https://api.faceit.com/auth/v1/oauth/token',
       requestBody,
       { headers },
