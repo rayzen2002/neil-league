@@ -3,6 +3,7 @@ import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import { api } from '@/lib/api'
+import jwt from 'jsonwebtoken'
 
 export async function GET(request) {
   console.log(`oi`)
@@ -39,11 +40,30 @@ export async function GET(request) {
     })
 
     const { id_token } = tokenResponse.data
-    const playerData = jwtDecode(id_token)
-
-    return NextResponse.json(playerData)
+    const {
+      guid,
+      picture,
+      email,
+      birthdate,
+      nickname,
+      give_name,
+      family_name,
+    } = jwtDecode(id_token)
+    const tokenPayload = {
+      guid,
+      picture,
+      email,
+      birthdate,
+      nickname,
+      give_name,
+      family_name,
+    }
+    const token = jwt.sign(tokenPayload, 'zxcvbn', {
+      expiresIn: '30 days',
+    })
+    return NextResponse.json(token)
   } catch (error) {
     console.log(error)
-    // return NextResponse.json(error)
+    return NextResponse.json(error)
   }
 }
