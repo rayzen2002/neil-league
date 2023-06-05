@@ -17,6 +17,7 @@ export async function GET(request) {
     grant_type: 'authorization_code',
     code,
   })
+  const redirectTo = request.cookies.get('redirectTo')?.value
 
   // const requestHeaders = {
   //   Authorization: `Basic ${base64Credentials}`,
@@ -40,7 +41,7 @@ export async function GET(request) {
 
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
-    const redirectURL = 'https://neildota.vercel.app'
+    const redirectURL = redirectTo ?? new URL('/', request.url)
     return NextResponse.redirect(redirectURL, {
       headers: {
         'Set-Cookie': `token=${playerData}; Path=/; max-age=2592000;`,
