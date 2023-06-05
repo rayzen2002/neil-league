@@ -42,9 +42,19 @@ export async function GET(request) {
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
     const redirectURL = redirectTo ?? new URL('/', request.url)
+    const token = playerData.jwt.sign(
+      {
+        name: id_token.name,
+        avatarUrl: id_token.avatarUrl,
+      },
+      {
+        sub: id_token.id,
+        expiresIn: '30 days',
+      },
+    )
     return NextResponse.redirect(redirectURL, {
       headers: {
-        'Set-Cookie': `token=${playerData}; Path=/; max-age=2592000;`,
+        'Set-Cookie': `token=${token}; Path=/; max-age=2592000;`,
       },
     })
   } catch (error) {
