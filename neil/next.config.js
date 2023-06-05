@@ -1,7 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['distribution.faceit-cdn.net', 'localhost'],
+    domains: [
+      'distribution.faceit-cdn.net',
+      'localhost',
+      'avatars.githubusercontent.com',
+    ],
   },
 }
 

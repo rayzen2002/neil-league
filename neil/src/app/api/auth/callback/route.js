@@ -13,9 +13,10 @@ export async function GET(request) {
   const { token } = registerResponse.data
 
   const redirectUrl = new URL('/', request.url)
+  const cookieExpiresInSeconds = 30 * 24 * 60 * 60
   return NextResponse.redirect(redirectUrl, {
     headers: {
-      'Set-Cookie': `token=${token}; Path=/;`,
+      'Set-Cookie': `token=${token}; Path=/;max-age=${cookieExpiresInSeconds}`,
     },
   })
 }
