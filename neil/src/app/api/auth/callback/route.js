@@ -3,7 +3,7 @@ import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import { api } from '@/lib/api'
-import jwt from 'jsonwebtoken'
+// import jwt from 'jsonwebtoken'
 
 export async function GET(request, response) {
   console.log(`oi`)
@@ -18,7 +18,7 @@ export async function GET(request, response) {
     grant_type: 'authorization_code',
     code,
   })
-  const redirectTo = request.cookies.get('redirectTo')?.value
+  // const redirectTo = request.cookies.get('redirectTo')?.value
 
   const headers = {
     Authorization: `Basic OTVlNGZhZjItZGIwZC00N2ZhLTkwNDMtM2EwN2Y5NTQ3Njg5OnlCdkpIelJFc3JWeTJub3NSSmxYTG1taGs1NThEMnZkdkdqem9BNVc=`,
@@ -39,27 +39,28 @@ export async function GET(request, response) {
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
 
-    const token = jwt.sign(
-      {
-        nickname: playerData.nickname,
-        avatarUrl: playerData.avatarUrl,
-        email: playerData.email,
-        name: playerData.name,
-      },
-      'supersecret', // Replace with your secret key
-      {
-        subject: playerData.guid,
-        expiresIn: '30 days',
-      },
-    )
+    // const token = jwt.sign(
+    //   {
+    //     nickname: playerData.nickname,
+    //     avatarUrl: playerData.avatarUrl,
+    //     email: playerData.email,
+    //     name: playerData.name,
+    //   },
+    //   'supersecret', // Replace with your secret key
+    //   {
+    //     subject: playerData.guid,
+    //     expiresIn: '30 days',
+    //   },
+    // )
 
-    const redirectURL = redirectTo ?? new URL('/', request.url)
+    // const redirectURL = redirectTo ?? new URL('/', request.url)
 
-    response.setHeader('Set-Cookie', `token=${token}; Path=/; max-age=2592000;`)
+    // response.setHeader('Set-Cookie', `token=${token}; Path=/; max-age=2592000;`)
 
-    return NextResponse.redirect(redirectURL, {
-      headers: response.getHeaders(),
-    })
+    // return NextResponse.redirect(redirectURL, {
+    //   headers: response.getHeaders(),
+    // })
+    return playerData
   } catch (error) {
     console.log(error)
     return NextResponse.error(error.message || 'An error occurred')
