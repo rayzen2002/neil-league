@@ -37,7 +37,7 @@ export async function POST(request) {
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
 
-    return NextResponse.json(tokenResponse)
+    return NextResponse.json(playerData)
   } catch (error) {
     console.log(error)
     // return NextResponse.json(error)
