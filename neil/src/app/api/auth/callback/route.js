@@ -41,12 +41,14 @@ export async function GET(request, response) {
 
     const token = jwt.sign(
       {
-        name: id_token.name,
-        avatarUrl: id_token.avatarUrl,
+        nickname: playerData.nickname,
+        avatarUrl: playerData.avatarUrl,
+        email: playerData.email,
+        name: playerData.name,
       },
       'supersecret', // Replace with your secret key
       {
-        subject: id_token.id,
+        subject: playerData.guid,
         expiresIn: '30 days',
       },
     )
