@@ -38,7 +38,10 @@ export async function GET(request) {
     const tokenResponse = await api.post(tokenEndpoint, requestBody, {
       headers,
     })
-
+    const fastify = require('fastify')()
+    fastify.register(require('@fastify/jwt'), {
+      secret: 'supersecret',
+    })
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
     const redirectURL = redirectTo ?? new URL('/', request.url)
