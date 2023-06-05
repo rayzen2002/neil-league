@@ -4,6 +4,7 @@ import jwtDecode from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import { api } from '@/lib/api'
 import jwt from 'jsonwebtoken'
+import dayjs from 'dayjs'
 
 export async function GET(request) {
   console.log(`oi`)
@@ -19,10 +20,6 @@ export async function GET(request) {
     code,
   })
 
-  // const requestHeaders = {
-  //   Authorization: `Basic ${base64Credentials}`,
-  //   'Content-Type': 'application/x-www-form-urlencoded',
-  // }
   const headers = {
     Authorization: `Basic OTVlNGZhZjItZGIwZC00N2ZhLTkwNDMtM2EwN2Y5NTQ3Njg5OnlCdkpIelJFc3JWeTJub3NSSmxYTG1taGs1NThEMnZkdkdqem9BNVc=`,
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -46,22 +43,31 @@ export async function GET(request) {
       email,
       birthdate,
       nickname,
-      give_name,
+      given_name,
       family_name,
     } = jwtDecode(id_token)
+
     const tokenPayload = {
       guid,
       picture,
       email,
       birthdate,
       nickname,
-      give_name,
+      given_name,
       family_name,
     }
+
     const token = jwt.sign(tokenPayload, 'zxcvbn', {
-      expiresIn: '30 days',
+      expiresIn: '30d',
     })
-    return NextResponse.json(token)
+
+    const redirectUrl = 'https://neildota.vercel.app'
+    const expirationDate = dayjs().add(1, 'month').toDate()
+    const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
+
+    return NextResponse.redirect(redirectUrl, {
+      headers: { 'Set-Cookie': cookie },
+    })
   } catch (error) {
     console.log(error)
     return NextResponse.json(error)
