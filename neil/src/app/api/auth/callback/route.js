@@ -3,7 +3,7 @@ import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import { api } from '@/lib/api'
-// import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 export async function GET(request, response) {
   console.log(`oi`)
@@ -39,19 +39,18 @@ export async function GET(request, response) {
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
 
-    // const token = jwt.sign(
-    //   {
-    //     nickname: playerData.nickname,
-    //     avatarUrl: playerData.avatarUrl,
-    //     email: playerData.email,
-    //     name: playerData.name,
-    //   },
-    //   'supersecret', // Replace with your secret key
-    //   {
-    //     subject: playerData.guid,
-    //     expiresIn: '30 days',
-    //   },
-    // )
+    const token = jwt.sign(
+      {
+        nickname: playerData.nickname,
+        avatarUrl: playerData.picture,
+        email: playerData.email,
+      },
+      'supersecret', // Replace with your secret key
+      {
+        subject: playerData.guid,
+        expiresIn: '30 days',
+      },
+    )
 
     // const redirectURL = redirectTo ?? new URL('/', request.url)
 
@@ -60,7 +59,7 @@ export async function GET(request, response) {
     // return NextResponse.redirect(redirectURL, {
     //   headers: response.getHeaders(),
     // })
-    return playerData
+    return token
   } catch (error) {
     console.log(error)
     return NextResponse.error(error.message || 'An error occurred')
