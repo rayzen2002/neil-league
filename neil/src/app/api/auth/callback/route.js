@@ -1,7 +1,7 @@
+/* eslint-disable camelcase */
 import { api } from '@/lib/api'
-import { NextResponse } from 'next/server'
 import QueryString from 'qs'
-
+import jwtDecode from 'jwt-decode'
 export async function GET(request) {
   console.log(`oi`)
   const { searchParams } = new URL(request.url)
@@ -23,7 +23,7 @@ export async function GET(request) {
   console.log(code)
   try {
     const registerResponse = await api.post(
-      '/register',
+      'https://api.faceit.com/auth/v1/oauth/token',
       requestBody,
       { headers },
       {
@@ -31,15 +31,16 @@ export async function GET(request) {
       },
     )
 
-    const { token } = registerResponse.data
-
-    const redirectUrl = new URL('/', request.url)
-    const cookieExpiresInSeconds = 30 * 24 * 60 * 60
-    return NextResponse.redirect(redirectUrl, {
-      headers: {
-        'Set-Cookie': `token=${token}; Path=/;max-age=${cookieExpiresInSeconds}`,
-      },
-    })
+    const { id_token } = registerResponse.data
+    const playerData = jwtDecode(id_token)
+    // const redirectUrl = new URL('/', request.url)
+    // const cookieExpiresInSeconds = 30 * 24 * 60 * 60
+    // return NextResponse.redirect(redirectUrl, {
+    //   headers: {
+    //     'Set-Cookie': `token=${token}; Path=/;max-age=${cookieExpiresInSeconds}`,
+    //   },
+    // })
+    return playerData
   } catch (error) {
     return error.data
   }
