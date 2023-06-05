@@ -40,8 +40,12 @@ export async function GET(request) {
 
     const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
-
-    return NextResponse.json(playerData)
+    const redirectURL = 'https://neildota.vercel.app'
+    return NextResponse.redirect(redirectURL, {
+      headers: {
+        'Set-Cookie': `token=${playerData}; Path=/; max-age=2592000;`,
+      },
+    })
   } catch (error) {
     console.log(error)
     // return NextResponse.json(error)
