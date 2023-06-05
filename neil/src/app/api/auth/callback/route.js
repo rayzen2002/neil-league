@@ -2,7 +2,9 @@
 import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-export async function GET(request) {
+import { NextResponse } from 'next/server'
+
+export async function POST(request) {
   console.log(`oi`)
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
@@ -16,35 +18,28 @@ export async function GET(request) {
     code,
   })
 
-  const headers = {
+  const requestHeaders = {
     Authorization: `Basic ${base64Credentials}`,
     'Content-Type': 'application/x-www-form-urlencoded',
   }
-  console.log(code)
-  console.log(headers)
-  console.log(base64Credentials)
-  try {
-    const registerResponse = await axios.post(
-      'https://api.faceit.com/auth/v1/oauth/token',
-      requestBody,
-      { headers },
-      {
-        code,
-      },
-    )
 
-    const { id_token } = registerResponse.data
+  const tokenEndpoint = 'https://api.faceit.com/auth/v1/oauth/token'
+
+  console.log(code)
+  console.log(requestHeaders)
+  console.log(base64Credentials)
+
+  try {
+    const tokenResponse = await axios.post(tokenEndpoint, requestBody, {
+      headers: requestHeaders,
+    })
+
+    const { id_token } = tokenResponse.data
     const playerData = jwtDecode(id_token)
-    // const redirectUrl = new URL('/', request.url)
-    // const cookieExpiresInSeconds = 30 * 24 * 60 * 60
-    // return NextResponse.redirect(redirectUrl, {
-    //   headers: {
-    //     'Set-Cookie': `token=${token}; Path=/;max-age=${cookieExpiresInSeconds}`,
-    //   },
-    // })
-    return playerData
+
+    return NextResponse.json(tokenResponse)
   } catch (error) {
-    console.error(error)
-    return error.data
+    console.log(error)
+    // return NextResponse.json(error)
   }
 }
