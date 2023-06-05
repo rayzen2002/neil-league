@@ -18,20 +18,25 @@ export async function POST(request) {
     code,
   })
 
-  const requestHeaders = {
-    Authorization: `Basic ${base64Credentials}`,
-    'Content-Type': 'application/x-www-form-urlencoded',
-  }
+  // const requestHeaders = {
+  //   Authorization: `Basic ${base64Credentials}`,
+  //   'Content-Type': 'application/x-www-form-urlencoded',
+  // }
+  const myHeaders = new Headers()
+  myHeaders.append('Authorization', `Basic ${base64Credentials}`)
+  myHeaders.get('Authorization')
+  myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+  myHeaders.get('Content-Type') // should return 'text/xml'
 
   const tokenEndpoint = 'https://api.faceit.com/auth/v1/oauth/token'
 
   console.log(code)
-  console.log(requestHeaders)
+  console.log(myHeaders)
   console.log(base64Credentials)
 
   try {
     const tokenResponse = await axios.post(tokenEndpoint, requestBody, {
-      headers: requestHeaders,
+      headers: myHeaders,
     })
 
     const { id_token } = tokenResponse.data
