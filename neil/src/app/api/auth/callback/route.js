@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import { api } from '@/lib/api'
 
-export async function POST(request) {
+export async function GET(request) {
   console.log(`oi`)
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
