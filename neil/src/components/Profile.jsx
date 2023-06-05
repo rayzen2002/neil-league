@@ -8,12 +8,12 @@ export default function Profile() {
     throw new Error('Nao autenticado')
   }
   const player = jwtDecode(token)
-  const { name, avatarUrl } = player
+  const { nickname, picture } = player
   return (
     <div>
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-400 ">
         <Image
-          src={avatarUrl}
+          src={picture}
           width={40}
           height={40}
           alt=""
@@ -21,7 +21,7 @@ export default function Profile() {
         />
       </div>
       <p className=" max-w-[120px] text-lg  leading-snug">
-        {name}
+        {nickname}
         <a href="" className="hover:text-red-400 block text-red-200">
           Quero sair
         </a>
