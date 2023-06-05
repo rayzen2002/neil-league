@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import QueryString from 'qs'
 import jwtDecode from 'jwt-decode'
-import axios from 'axios'
 import { NextResponse } from 'next/server'
+import { api } from '@/lib/api'
 
 export async function POST(request) {
   console.log(`oi`)
@@ -34,7 +34,7 @@ export async function POST(request) {
   console.log(base64Credentials)
 
   try {
-    const tokenResponse = await axios.post(tokenEndpoint, requestBody, {
+    const tokenResponse = await api.post(tokenEndpoint, requestBody, {
       headers,
     })
 
