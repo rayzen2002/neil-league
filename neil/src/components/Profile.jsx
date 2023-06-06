@@ -13,7 +13,7 @@ export default function Profile() {
     <div className="text-zinc-100 flex items-center gap-3 px-4 pt-5 text-left ">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-400 ">
         <Image
-          src={picture || '/neilFaceit'}
+          src={picture || 'neilFaceit'}
           width={40}
           height={40}
           alt=""
