@@ -45,7 +45,7 @@ export async function GET(request) {
     } = jwtDecode(id_token)
     let player = await prisma.player.findUnique({
       where: {
-        id: id_token.guid,
+        id: guid,
       },
     })
 
@@ -61,25 +61,25 @@ export async function GET(request) {
           headers,
         },
       )
+      const updatedPlayerData = await fetchUpdatedPlayerData(guid)
+      if (updatedPlayerData) {
+        player = await prisma.player.update({
+          where: {
+            id: guid,
+          },
+          data: {
+            id: guid,
+            nickname,
+            avatarUrl: picture,
+            email,
+            name: `${given_name} ${family_name}`,
+            refresh_token,
+          },
+        })
+      }
       refresh_token = refreshTokenResponse.data.refresh_token
     }
 
-    const updatedPlayerData = await fetchUpdatedPlayerData(guid)
-    if (updatedPlayerData) {
-      player = await prisma.player.update({
-        where: {
-          id: guid,
-        },
-        data: {
-          id: guid,
-          nickname,
-          avatarUrl: picture,
-          email,
-          name: `${given_name} ${family_name}`,
-          refresh_token,
-        },
-      })
-    }
     if (!player) {
       player = await prisma.player.create({
         data: {
@@ -108,13 +108,14 @@ export async function GET(request) {
       const redirectUrl = 'https://neildota.vercel.app'
       const expirationDate = dayjs().add(1, 'month').toDate()
       const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
-
+      console.log(tokenPayload)
+      console.log(cookie)
       return NextResponse.redirect(redirectUrl, {
         headers: { 'Set-Cookie': cookie },
       })
     }
   } catch (error) {
     console.log(error)
-    return NextResponse.json(error)
+    return NextResponse.json({ error: 'An error occurred' })
   }
 }
