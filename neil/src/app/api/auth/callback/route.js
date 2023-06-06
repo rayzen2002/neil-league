@@ -6,9 +6,9 @@ import { api } from '@/lib/api'
 import jwt from 'jsonwebtoken'
 import dayjs from 'dayjs'
 import { prisma } from '@/lib/prisma'
+import { fetchUpdatedPlayerData } from '@/lib/fetchUpdatedPlayer'
 
 export async function GET(request) {
-  console.log(`oi`)
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const clientId = process.env.CLIENT_ID
@@ -27,10 +27,6 @@ export async function GET(request) {
   }
 
   const tokenEndpoint = 'https://api.faceit.com/auth/v1/oauth/token'
-
-  console.log(code)
-  console.log(headers)
-  console.log(base64Credentials)
 
   try {
     const tokenResponse = await api.post(tokenEndpoint, requestBody, {
@@ -70,6 +66,21 @@ export async function GET(request) {
         id: guid,
       },
     })
+    const updatedPlayerData = await fetchUpdatedPlayerData(guid)
+    if (updatedPlayerData) {
+      player = await prisma.player.update({
+        where: {
+          id: guid,
+        },
+        data: {
+          id: guid,
+          nickname,
+          avatarUrl: picture,
+          email,
+          name: `${given_name} ${family_name}`,
+        },
+      })
+    }
     if (!player) {
       player = await prisma.player.create({
         data: {
