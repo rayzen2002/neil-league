@@ -22,7 +22,10 @@ export default function Profile() {
       </div>
       <p className=" max-w-[120px] text-lg  leading-snug">
         {nickname}
-        <a href="" className="hover:text-red-400 block text-red-200">
+        <a
+          href="/api/callback/logout"
+          className="hover:text-red-400 block text-red-200"
+        >
           Quero sair
         </a>
       </p>
