@@ -17,6 +17,7 @@ model Player {
   customAvatarUrl String?
   customSound     String?
   games           Games[] @relation("GamesToPlayer")
+  refresh_token   String
 }
 
 model Games {
