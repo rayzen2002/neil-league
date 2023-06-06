@@ -22,7 +22,7 @@ export async function GET(request) {
   })
 
   const headers = {
-    Authorization: `Basic OTVlNGZhZjItZGIwZC00N2ZhLTkwNDMtM2EwN2Y5NTQ3Njg5OnlCdkpIelJFc3JWeTJub3NSSmxYTG1taGs1NThEMnZkdkdqem9BNVc=`,
+    Authorization: `Basic ${base64Credentials}`,
     'Content-Type': 'application/x-www-form-urlencoded',
   }
 

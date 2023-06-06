@@ -19,7 +19,6 @@ export const Players = async () => {
       if (response.items.length === 0) {
         break // No more players, exit the loop
       }
-      console.log(players)
       players = [...players, ...response.items]
       page++
     }
