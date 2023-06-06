@@ -33,7 +33,7 @@ export async function GET(request) {
       headers,
     })
 
-    const { id_token } = tokenResponse.data
+    let { id_token, refresh_token } = tokenResponse.data
     const {
       guid,
       picture,
@@ -43,29 +43,27 @@ export async function GET(request) {
       given_name,
       family_name,
     } = jwtDecode(id_token)
-
-    const tokenPayload = {
-      guid,
-      picture,
-      email,
-      birthdate,
-      nickname,
-      given_name,
-      family_name,
-    }
-
-    const token = jwt.sign(tokenPayload, 'zxcvbn', {
-      expiresIn: '30d',
-    })
-
-    const redirectUrl = 'https://neildota.vercel.app'
-    const expirationDate = dayjs().add(1, 'month').toDate()
-    const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
     let player = await prisma.player.findUnique({
       where: {
-        id: guid,
+        id: id_token.guid,
       },
     })
+
+    if (player) {
+      const refreshRequestBody = QueryString.stringify({
+        grant_type: 'refresh_token',
+        refresh_token,
+      })
+      const refreshTokenResponse = await api.post(
+        tokenEndpoint,
+        refreshRequestBody,
+        {
+          headers,
+        },
+      )
+      refresh_token = refreshTokenResponse.data.refresh_token
+    }
+
     const updatedPlayerData = await fetchUpdatedPlayerData(guid)
     if (updatedPlayerData) {
       player = await prisma.player.update({
@@ -78,6 +76,7 @@ export async function GET(request) {
           avatarUrl: picture,
           email,
           name: `${given_name} ${family_name}`,
+          refresh_token,
         },
       })
     }
@@ -89,8 +88,27 @@ export async function GET(request) {
           avatarUrl: picture,
           email,
           name: `${given_name} ${family_name}`,
+          refresh_token,
         },
       })
+
+      const tokenPayload = {
+        guid,
+        picture,
+        email,
+        birthdate,
+        nickname,
+        given_name,
+        family_name,
+      }
+      const token = jwt.sign(tokenPayload, 'zxcvbn', {
+        expiresIn: '30d',
+      })
+
+      const redirectUrl = 'https://neildota.vercel.app'
+      const expirationDate = dayjs().add(1, 'month').toDate()
+      const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
+
       return NextResponse.redirect(redirectUrl, {
         headers: { 'Set-Cookie': cookie },
       })
