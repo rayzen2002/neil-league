@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken'
 import dayjs from 'dayjs'
 import { prisma } from '@/lib/prisma'
 import { fetchUpdatedPlayerData } from '@/lib/fetchUpdatedPlayer'
+import { validateSessionToken } from '@/lib/validateSessionToken'
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
@@ -68,12 +69,9 @@ export async function GET(request) {
             id: guid,
           },
           data: {
-            id: guid,
-            nickname,
-            avatarUrl: picture,
-            email,
-            name: `${given_name} ${family_name}`,
-            refresh_token,
+            nickname: updatedPlayerData.updatedNickname,
+            avatarUrl: updatedPlayerData.updatedPicture,
+            email: updatedPlayerData.updatedEmail,
           },
         })
       }
@@ -91,7 +89,10 @@ export async function GET(request) {
           refresh_token,
         },
       })
-
+    }
+    const sessionToken = request.cookies.token
+    const sessionData = await validateSessionToken(sessionToken)
+    if (sessionData) {
       const tokenPayload = {
         guid,
         picture,
