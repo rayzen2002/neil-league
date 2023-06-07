@@ -3,7 +3,7 @@ import axios from 'axios'
 export async function fetchUpdatedPlayerData(playerId) {
   try {
     const response = await axios.get(
-      `https://api.faceit.com/players/${playerId}`,
+      `https://open.faceit.com/data/v4/players/${playerId}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
