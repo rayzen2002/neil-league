@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 export async function validateSessionToken(sessionToken) {
   try {
-    const secretKey = 'zxcvbn' // Replace with your actual secret key
+    const secretKey = 'zxcvbn'
     const decodedToken = jwt.verify(sessionToken, secretKey)
     const {
       guid,
@@ -31,7 +31,7 @@ export async function validateSessionToken(sessionToken) {
         family_name,
       }
     } else {
-      throw new Error('Invalid player data')
+      throw new Error('Player not found or invalid player data')
     }
   } catch (error) {
     throw new Error('Invalid session token')

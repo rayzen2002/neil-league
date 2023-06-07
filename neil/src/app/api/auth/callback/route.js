@@ -73,6 +73,7 @@ export async function GET(request) {
             nickname: updatedPlayerData.updatedNickname,
             avatarUrl: updatedPlayerData.updatedPicture,
             email: updatedPlayerData.updatedEmail,
+            refresh_token: updatedPlayerData.updatedRefreshToken,
           },
         })
       }
@@ -90,30 +91,30 @@ export async function GET(request) {
         },
       })
     }
+    const tokenPayload = {
+      guid: player.guid,
+      picture: player.avatarUrl,
+      email: player.email,
+      birthdate,
+      nickname,
+      name: player.name,
+    }
+    const token = jwt.sign(tokenPayload, 'zxcvbn', {
+      expiresIn: '30d',
+    })
     const sessionToken = request.cookies.token
+    console.log(sessionToken)
     const sessionData = await validateSessionToken(sessionToken)
     if (sessionData) {
-      const tokenPayload = {
-        guid,
-        picture,
-        email,
-        birthdate,
-        nickname,
-        given_name,
-        family_name,
-      }
-      const token = jwt.sign(tokenPayload, 'zxcvbn', {
-        expiresIn: '30d',
-      })
-
       const redirectUrl = 'https://neildota.vercel.app'
       const expirationDate = dayjs().add(1, 'month').toDate()
       const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
-      console.log(tokenPayload)
       console.log(cookie)
       return NextResponse.redirect(redirectUrl, {
         headers: { 'Set-Cookie': cookie },
       })
+    } else {
+      throw new Error('Session is not valid 322')
     }
   } catch (error) {
     console.log(error)

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from 'axios'
 
 export async function fetchUpdatedPlayerData(playerId) {
@@ -12,12 +13,13 @@ export async function fetchUpdatedPlayerData(playerId) {
     )
 
     // Process the response data
-    const { nickname, avatarUrl, email, name } = response.data
+    const { nickname, avatarUrl, email, name, refresh_token } = response.data
     return {
       updatedNickname: nickname,
       updatedAvatarUrl: avatarUrl,
       updatedEmail: email,
       updatedName: name,
+      updatedRefreshToken: refresh_token,
     }
   } catch (error) {
     console.log(error)
