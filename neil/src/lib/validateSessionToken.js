@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
-import jwtDecode from 'jwt-decode'
 import { prisma } from './prisma'
+import jwt from 'jsonwebtoken'
 
 export async function validateSessionToken(sessionToken) {
   try {
-    const secretKey = 'your-secret-key' // Replace with your actual secret key
-    const decodedToken = jwtDecode.verify(sessionToken, secretKey)
+    const secretKey = 'zxcvbn' // Replace with your actual secret key
+    const decodedToken = jwt.verify(sessionToken, secretKey)
     const {
       guid,
       picture,
