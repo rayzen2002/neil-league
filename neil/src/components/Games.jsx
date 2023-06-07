@@ -3,30 +3,37 @@ import { Crown } from 'lucide-react'
 
 export const Games = async () => {
   let games = []
-
+  let page = 1
+  const pageSize = 100
   try {
-    const res = await fetch(
-      `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=50`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-          Accept: 'application/json',
+    while (games.length < 500) {
+      const res = await fetch(
+        `https://open.faceit.com/data/v4/hubs/${
+          process.env.NEXT_PUBLIC_HUB_ID
+        }/matches?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+            Accept: 'application/json',
+          },
         },
-        next: {
-          revalidate: 30,
-        },
-      },
-    )
-    games = await res.json()
+      )
+      const response = await res.json()
+      if (response.items.length === 0) {
+        break // No more players, exit the loop
+      }
+      games = [...games, ...response.items]
+      page++
+    }
   } catch (error) {
-    console.error(error)
+    console.error(`Erro ao fazer requisicao : ${error}`)
   }
 
   return (
     <div>
       <ul>
-        {games && games.items && games.items.length > 0 ? (
-          games.items.map((match) => {
+        {games && games.length > 0 ? (
+          games.map((match) => {
             if (match.status === 'CANCELLED') {
               return null
             } else {
