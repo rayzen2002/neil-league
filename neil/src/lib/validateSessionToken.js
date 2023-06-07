@@ -1,39 +1,39 @@
-/* eslint-disable camelcase */
-import { prisma } from './prisma'
 import jwt from 'jsonwebtoken'
+import { prisma } from './prisma'
 
 export async function validateSessionToken(sessionToken) {
   try {
     const secretKey = 'zxcvbn'
     const decodedToken = jwt.verify(sessionToken, secretKey)
-    const {
-      guid,
-      picture,
-      email,
-      birthdate,
-      nickname,
-      given_name,
-      family_name,
-    } = decodedToken
+
+    const { guid } = decodedToken
     const player = await prisma.player.findUnique({
       where: {
         id: guid,
       },
     })
-    if (player) {
-      return {
-        guid,
-        picture,
-        email,
-        birthdate,
-        nickname,
-        given_name,
-        family_name,
-      }
-    } else {
-      throw new Error('Player not found or invalid player data')
+
+    if (!player) {
+      throw new Error('Player not found')
+    }
+
+    const { picture, email, birthdate, nickname, name } = decodedToken
+
+    return {
+      guid,
+      picture,
+      email,
+      birthdate,
+      nickname,
+      name,
     }
   } catch (error) {
-    throw new Error('Invalid session token')
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new Error('Session token has expired')
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      throw new Error('Invalid session token')
+    } else {
+      throw new Error('An error occurred while validating the session token')
+    }
   }
 }
