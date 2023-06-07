@@ -3,7 +3,7 @@ import { prisma } from './prisma'
 
 export async function fetchUpdatedPlayerData(playerId) {
   try {
-    const player = prisma.player.findUnique({
+    const player = await prisma.player.findUnique({
       where: {
         id: playerId,
       },
@@ -20,7 +20,7 @@ export async function fetchUpdatedPlayerData(playerId) {
         updatedName: name,
       }
     }
-    return
+    return null
   } catch (error) {
     console.log(error)
     return null
