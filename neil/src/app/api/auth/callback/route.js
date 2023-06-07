@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import dayjs from 'dayjs'
 import { prisma } from '@/lib/prisma'
 // import { fetchUpdatedPlayerData } from '@/lib/fetchUpdatedPlayer'
-import { validateSessionToken } from '@/lib/validateSessionToken'
+// import { validateSessionToken } from '@/lib/validateSessionToken'
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
@@ -104,17 +104,17 @@ export async function GET(request) {
       const token = jwt.sign(tokenPayload, 'zxcvbn', {
         expiresIn: '30d',
       })
-      const sessionToken = request.cookies.token
-      const sessionData = await validateSessionToken(sessionToken)
-      if (sessionData) {
-        const expirationDate = dayjs().add(1, 'month').toDate()
-        const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
-        return NextResponse.redirect(redirectUrl, {
-          headers: { 'Set-Cookie': cookie },
-        })
-      } else {
-        throw new Error('Session is not valid 322')
-      }
+      // const sessionToken = request.cookies.token
+      // const sessionData = await validateSessionToken(sessionToken)
+      // if (sessionData) {
+      const expirationDate = dayjs().add(1, 'month').toDate()
+      const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
+      return NextResponse.redirect(redirectUrl, {
+        headers: { 'Set-Cookie': cookie },
+      })
+      // } else {
+      //   throw new Error('Session is not valid 322')
+      // }
     } catch (error) {
       return error
     }
