@@ -6,27 +6,17 @@ export async function validateSessionToken(sessionToken) {
     const secretKey = 'zxcvbn'
     const decodedToken = jwt.verify(sessionToken, secretKey)
 
-    const { guid } = decodedToken
     const player = await prisma.player.findUnique({
       where: {
-        id: guid,
+        id: decodedToken.guid,
       },
     })
 
     if (!player) {
-      throw new Error('Player not found')
+      return null
     }
 
-    const { picture, email, birthdate, nickname, name } = decodedToken
-
-    return {
-      guid,
-      picture,
-      email,
-      birthdate,
-      nickname,
-      name,
-    }
+    return true
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       throw new Error('Session token has expired')

@@ -93,27 +93,22 @@ export async function GET(request) {
       })
     }
     try {
-      if (request.cookies.token) {
-        return NextResponse.redirect(redirectUrl)
-      }
       const tokenPayload = {
-        guid: player.guid,
-        picture: player.avatarUrl,
-        email: player.email,
+        guid,
+        picture,
+        email,
         birthdate,
         nickname,
-        name: player.name,
+        name: `${given_name} ${family_name}`,
       }
       const token = jwt.sign(tokenPayload, 'zxcvbn', {
         expiresIn: '30d',
       })
       const sessionToken = request.cookies.token
-      console.log(sessionToken)
       const sessionData = await validateSessionToken(sessionToken)
       if (sessionData) {
         const expirationDate = dayjs().add(1, 'month').toDate()
         const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
-        console.log(cookie)
         return NextResponse.redirect(redirectUrl, {
           headers: { 'Set-Cookie': cookie },
         })
