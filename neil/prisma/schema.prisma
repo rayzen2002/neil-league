@@ -21,6 +21,7 @@ model Player {
 }
 
 model Games {
-  id     String   @id @unique
-  player Player[] @relation("GamesToPlayer")
+  id         String   @id @unique
+  player_ids String[]
+  players    Player[] @relation("GamesToPlayer")
 }
