@@ -62,6 +62,7 @@ export async function GET(request) {
           headers,
         },
       )
+      refresh_token = refreshTokenResponse.data.refresh_token
       const updatedPlayerData = await fetchUpdatedPlayerData(guid)
       if (updatedPlayerData) {
         player = await prisma.player.update({
@@ -75,7 +76,6 @@ export async function GET(request) {
           },
         })
       }
-      refresh_token = refreshTokenResponse.data.refresh_token
     }
 
     if (!player) {

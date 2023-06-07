@@ -1,26 +1,24 @@
-import { api } from './api'
-import { prisma } from './prisma'
+import axios from 'axios'
 
 export async function fetchUpdatedPlayerData(playerId) {
   try {
-    const player = await prisma.player.findUnique({
-      where: {
-        id: playerId,
+    const response = await axios.get(
+      `https://api.faceit.com/players/${playerId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+        },
       },
-    })
-    if (player) {
-      const response = await api.get(
-        `https://api.faceit.com/players/${player.id}`,
-      )
-      const { nickname, avatarUrl, email, name } = response.data
-      return {
-        updatedNickname: nickname,
-        updatedAvatarUrl: avatarUrl,
-        updatedEmail: email,
-        updatedName: name,
-      }
+    )
+
+    // Process the response data
+    const { nickname, avatarUrl, email, name } = response.data
+    return {
+      updatedNickname: nickname,
+      updatedAvatarUrl: avatarUrl,
+      updatedEmail: email,
+      updatedName: name,
     }
-    return null
   } catch (error) {
     console.log(error)
     return null
