@@ -112,6 +112,7 @@ export async function GET(request) {
       return NextResponse.redirect(redirectUrl, {
         headers: { 'Set-Cookie': cookie },
       })
+
       // } else {
       //   throw new Error('Session is not valid 322')
       // }

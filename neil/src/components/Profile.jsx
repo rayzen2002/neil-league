@@ -23,7 +23,7 @@ export default function Profile() {
       <p className=" max-w-[120px] text-lg  leading-snug">
         {nickname}
         <a
-          href="/api/callback/logout"
+          href="https://neildota.vercel.app/api/auth/logout"
           className="hover:text-red-400 block text-red-200"
         >
           Quero sair
