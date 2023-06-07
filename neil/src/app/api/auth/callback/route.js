@@ -15,6 +15,7 @@ export async function GET(request) {
   const clientId = process.env.CLIENT_ID
   const clientSecret = process.env.CLIENT_SECRET
   const credentials = `${clientId}:${clientSecret}`
+  const redirectUrl = 'https://neildota.vercel.app'
 
   const base64Credentials = Buffer.from(credentials, 'utf-8').toString('base64')
   const requestBody = QueryString.stringify({
@@ -91,30 +92,36 @@ export async function GET(request) {
         },
       })
     }
-    const tokenPayload = {
-      guid: player.guid,
-      picture: player.avatarUrl,
-      email: player.email,
-      birthdate,
-      nickname,
-      name: player.name,
-    }
-    const token = jwt.sign(tokenPayload, 'zxcvbn', {
-      expiresIn: '30d',
-    })
-    const sessionToken = request.cookies.token
-    console.log(sessionToken)
-    const sessionData = await validateSessionToken(sessionToken)
-    if (sessionData) {
-      const redirectUrl = 'https://neildota.vercel.app'
-      const expirationDate = dayjs().add(1, 'month').toDate()
-      const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
-      console.log(cookie)
-      return NextResponse.redirect(redirectUrl, {
-        headers: { 'Set-Cookie': cookie },
+    try {
+      if (request.cookies.token) {
+        return NextResponse.redirect(redirectUrl)
+      }
+      const tokenPayload = {
+        guid: player.guid,
+        picture: player.avatarUrl,
+        email: player.email,
+        birthdate,
+        nickname,
+        name: player.name,
+      }
+      const token = jwt.sign(tokenPayload, 'zxcvbn', {
+        expiresIn: '30d',
       })
-    } else {
-      throw new Error('Session is not valid 322')
+      const sessionToken = request.cookies.token
+      console.log(sessionToken)
+      const sessionData = await validateSessionToken(sessionToken)
+      if (sessionData) {
+        const expirationDate = dayjs().add(1, 'month').toDate()
+        const cookie = `token=${token}; expires=${expirationDate.toUTCString()}; path=/`
+        console.log(cookie)
+        return NextResponse.redirect(redirectUrl, {
+          headers: { 'Set-Cookie': cookie },
+        })
+      } else {
+        throw new Error('Session is not valid 322')
+      }
+    } catch (error) {
+      return error
     }
   } catch (error) {
     console.log(error)
