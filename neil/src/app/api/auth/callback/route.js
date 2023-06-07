@@ -6,7 +6,7 @@ import { api } from '@/lib/api'
 import jwt from 'jsonwebtoken'
 import dayjs from 'dayjs'
 import { prisma } from '@/lib/prisma'
-import { fetchUpdatedPlayerData } from '@/lib/fetchUpdatedPlayer'
+// import { fetchUpdatedPlayerData } from '@/lib/fetchUpdatedPlayer'
 import { validateSessionToken } from '@/lib/validateSessionToken'
 
 export async function GET(request) {
@@ -35,7 +35,7 @@ export async function GET(request) {
       headers,
     })
 
-    let { id_token, refresh_token } = tokenResponse.data
+    const { id_token, refresh_token } = tokenResponse.data
     const {
       guid,
       picture,
@@ -51,34 +51,34 @@ export async function GET(request) {
       },
     })
 
-    if (player) {
-      const refreshRequestBody = QueryString.stringify({
-        grant_type: 'refresh_token',
-        refresh_token,
-      })
-      const refreshTokenResponse = await api.post(
-        tokenEndpoint,
-        refreshRequestBody,
-        {
-          headers,
-        },
-      )
-      refresh_token = refreshTokenResponse.data.refresh_token
-      const updatedPlayerData = await fetchUpdatedPlayerData(guid)
-      if (updatedPlayerData) {
-        player = await prisma.player.update({
-          where: {
-            id: guid,
-          },
-          data: {
-            nickname: updatedPlayerData.updatedNickname,
-            avatarUrl: updatedPlayerData.updatedPicture,
-            email: updatedPlayerData.updatedEmail,
-            refresh_token: updatedPlayerData.updatedRefreshToken,
-          },
-        })
-      }
-    }
+    // if (player) {
+    //   const refreshRequestBody = QueryString.stringify({
+    //     grant_type: 'refresh_token',
+    //     refresh_token,
+    //   })
+    //   const refreshTokenResponse = await api.post(
+    //     tokenEndpoint,
+    //     refreshRequestBody,
+    //     {
+    //       headers,
+    //     },
+    //   )
+    //   refresh_token = refreshTokenResponse.data.refresh_token
+    //   const updatedPlayerData = await fetchUpdatedPlayerData(guid)
+    //   if (updatedPlayerData) {
+    //     player = await prisma.player.update({
+    //       where: {
+    //         id: guid,
+    //       },
+    //       data: {
+    //         nickname: updatedPlayerData.updatedNickname,
+    //         avatarUrl: updatedPlayerData.updatedPicture,
+    //         email: updatedPlayerData.updatedEmail,
+    //         refresh_token: updatedPlayerData.updatedRefreshToken,
+    //       },
+    //     })
+    //   }
+    // }
 
     if (!player) {
       player = await prisma.player.create({
