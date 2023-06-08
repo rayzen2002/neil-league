@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
+import Image from 'next/image'
 
 export const Games = async () => {
   let games = []
@@ -79,8 +80,34 @@ export const Games = async () => {
                     </div>
                   </h1>
 
-                  <p>
-                    Link da Partida:{' '}
+                  <p>Link da Partida: </p>
+                  <div className="flex gap-4 ">
+                    <a
+                      href={`${match.faceit_url.replace(
+                        /\{lang}/,
+                        'en',
+                      )}/scoreboard`}
+                    >
+                      <Image
+                        src="/faceit.svg"
+                        alt="faceit"
+                        width={40}
+                        height={40}
+                      />
+                    </a>
+                    <a
+                      href={`${match.faceit_url.replace(
+                        /\{lang}/,
+                        'en',
+                      )}/scoreboard`}
+                    >
+                      <Image
+                        src="/dota.svg"
+                        alt="dotabuff"
+                        width={40}
+                        height={40}
+                      />
+                    </a>
                     <a
                       href={`${match.faceit_url.replace(
                         /\{lang}/,
@@ -89,7 +116,7 @@ export const Games = async () => {
                     >
                       Faceit ID
                     </a>
-                  </p>
+                  </div>
                   <p>Data da partida : {gameStartedAt}</p>
                   <p>
                     Duracao do game :{' '}

@@ -5,6 +5,7 @@ const nextConfig = {
       'distribution.faceit-cdn.net',
       'localhost',
       'avatars.githubusercontent.com',
+      'assets.faceit-cdn.net',
     ],
   },
 }
