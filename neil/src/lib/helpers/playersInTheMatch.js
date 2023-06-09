@@ -25,4 +25,4 @@ async function playersInTheMatch(matchId) {
   }
 }
 
-module.exports = playersInTheMatch
+module.exports = { playersInTheMatch }

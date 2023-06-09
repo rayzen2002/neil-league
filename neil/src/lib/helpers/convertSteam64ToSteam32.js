@@ -7,4 +7,4 @@ function convertSteam64ToSteam32(steam64ids) {
   })
   return steam32ids
 }
-module.exports = convertSteam64ToSteam32
+module.exports = { convertSteam64ToSteam32 }

@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
 import Image from 'next/image'
+const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 
 export const Games = async () => {
   let games = []
@@ -34,7 +35,9 @@ export const Games = async () => {
     <div>
       <ul>
         {games && games.length > 0 ? (
-          games.map((match) => {
+          games.map(async (match) => {
+            match.match_id = await getDotabuffUrl(match.match_id)
+            console.log(match.match_id)
             if (match.status === 'CANCELLED') {
               return null
             } else {
@@ -109,10 +112,7 @@ export const Games = async () => {
                       />
                     </a>
                     <a
-                      href={`${match.faceit_url.replace(
-                        /\{lang}/,
-                        'en',
-                      )}/scoreboard`}
+                      href={`https://www.dotabuff.com/matches/${match.faceit_url}`}
                     >
                       Faceit ID
                     </a>

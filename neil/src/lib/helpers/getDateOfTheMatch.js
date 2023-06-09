@@ -13,4 +13,4 @@ async function getDateOfTheMatch(matchId) {
   return date
 }
 
-module.exports = getDateOfTheMatch
+module.exports = { getDateOfTheMatch }

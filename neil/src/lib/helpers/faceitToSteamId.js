@@ -16,4 +16,4 @@ async function faceitToSteamId(playersId) {
   return steamIds
 }
 
-module.exports = faceitToSteamId
+module.exports = { faceitToSteamId }

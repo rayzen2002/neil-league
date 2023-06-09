@@ -15,4 +15,4 @@ async function findMatch(steam32ids) {
   return opendotaId
 }
 
-module.exports = findMatch
+module.exports = { findMatch }
