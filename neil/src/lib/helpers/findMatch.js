@@ -1,3 +1,4 @@
+require('dotenv').config()
 async function findMatch(steam32ids) {
   const basePlayer = steam32ids.shift()
   const agroupedIds = steam32ids.map((id) => {

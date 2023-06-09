@@ -1,32 +1,31 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
 import Image from 'next/image'
-const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
+// const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 
 export const Games = async () => {
   let games = []
-  let page = 1
-  const pageSize = 100
+  // const page = 1
+  const pageSize = 50
   try {
-    while (games.length < 500) {
-      const res = await fetch(
-        `https://open.faceit.com/data/v4/hubs/${
-          process.env.NEXT_PUBLIC_HUB_ID
-        }/matches?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-            Accept: 'application/json',
-          },
+    // while (games.length < 50) {
+    const res = await fetch(
+      `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=${pageSize}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+          Accept: 'application/json',
         },
-      )
-      const response = await res.json()
-      if (response.items.length === 0) {
-        break // No more players, exit the loop
-      }
-      games = [...games, ...response.items]
-      page++
-    }
+      },
+    )
+    const response = await res.json()
+    // if (response.items.length === 0) {
+    //   break // No more games, exit the loop
+    // }
+    games = response.items
+    // games = [...games, ...response.items]
+    // page++
+    // }
   } catch (error) {
     console.error(`Erro ao fazer requisicao : ${error}`)
   }
@@ -36,7 +35,6 @@ export const Games = async () => {
       <ul>
         {games && games.length > 0 ? (
           games.map(async (match) => {
-            match.match_id = await getDotabuffUrl(match.match_id)
             console.log(match.match_id)
             if (match.status === 'CANCELLED') {
               return null

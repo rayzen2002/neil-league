@@ -1,3 +1,4 @@
+require('dotenv').config()
 async function faceitToSteamId(playersId) {
   const steamIds = []
   for (const playerId of playersId) {
