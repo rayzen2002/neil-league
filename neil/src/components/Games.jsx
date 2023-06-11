@@ -6,7 +6,7 @@ const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 export const Games = async () => {
   let games = []
   // const page = 1
-  const pageSize = 20
+  const pageSize = 100
   try {
     // while (games.length < 50) {
     const res = await fetch(
