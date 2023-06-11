@@ -12,7 +12,7 @@ async function findMatch(steam32ids) {
   const res = await fetch(endpoint)
   const match = await res.json()
   const opendotaId = match[0].match_id
-  console.log(opendotaId)
+  // console.log(opendotaId)
   return opendotaId
 }
 

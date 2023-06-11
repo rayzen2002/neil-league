@@ -1,7 +1,7 @@
 require('dotenv').config()
 async function playersInTheMatch(matchId) {
-  console.log(matchId)
-  console.log(process.env.NEXT_PUBLIC_API_KEY)
+  // console.log(matchId)
+  // console.log(process.env.NEXT_PUBLIC_API_KEY)
   try {
     const res = await fetch(
       `https://open.faceit.com/data/v4/matches/${matchId}`,
@@ -22,7 +22,7 @@ async function playersInTheMatch(matchId) {
           return player.player_id
         }),
       )
-    console.log(playersInTheMatch)
+    // console.log(playersInTheMatch)
     return playersInTheMatch
   } catch (error) {
     console.log(`Erro na requisicao de buscar partidas${error}`)

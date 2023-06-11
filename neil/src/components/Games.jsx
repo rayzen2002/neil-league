@@ -1,12 +1,12 @@
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
 import Image from 'next/image'
-// const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
+const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 
 export const Games = async () => {
   let games = []
   // const page = 1
-  const pageSize = 50
+  const pageSize = 20
   try {
     // while (games.length < 50) {
     const res = await fetch(
@@ -19,10 +19,13 @@ export const Games = async () => {
       },
     )
     const response = await res.json()
+
     // if (response.items.length === 0) {
     //   break // No more games, exit the loop
     // }
-    games = response.items
+    games = await response.items
+
+    // console.log(games)
     // games = [...games, ...response.items]
     // page++
     // }
@@ -35,10 +38,12 @@ export const Games = async () => {
       <ul>
         {games && games.length > 0 ? (
           games.map(async (match) => {
-            console.log(match.match_id)
+            // console.log(match.match_id)
             if (match.status === 'CANCELLED') {
               return null
             } else {
+              const matchId = await getDotabuffUrl(match.match_id)
+              match.dotabuffId = matchId // Add dotabuffId property to the match object
               const gameStartedAt = dayjs(1000 * match.started_at).format(
                 'DD/MM/YYYY HH:mm',
               )
@@ -110,7 +115,7 @@ export const Games = async () => {
                       />
                     </a>
                     <a
-                      href={`https://www.dotabuff.com/matches/${match.faceit_url}`}
+                      href={`https://www.dotabuff.com/matches/${match.dotabuffId}`}
                     >
                       Faceit ID
                     </a>
