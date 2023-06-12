@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 export default function Loading() {
   return (
     <div role="status" className=" flex  items-center justify-center pt-40 ">
