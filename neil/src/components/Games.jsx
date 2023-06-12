@@ -1,3 +1,6 @@
+/* eslint-disable camelcase */
+// import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import dayjs from 'dayjs'
 import { Crown } from 'lucide-react'
 import Image from 'next/image'
@@ -24,8 +27,41 @@ export const Games = async () => {
     //   break // No more games, exit the loop
     // }
     games = await response.items
-
-    console.log(games)
+    const gamesForDatabase = games.map((game) => {
+      if (game.status === 'FINISHED') {
+        return {
+          match_id: game.match_id,
+          players: game.teams.faction1.roster
+            .map((player) => {
+              return player.player_id
+            })
+            .concat(
+              game.teams.faction2.roster.map((player) => {
+                return player.player_id
+              }),
+            ),
+        }
+      }
+      return null
+    })
+    gamesForDatabase.forEach(async (game) => {
+      if (game) {
+        const gameDatabase = await prisma.games.findUnique({
+          where: {
+            id: game.match_id,
+          },
+        })
+        if (!gameDatabase) {
+          await prisma.games.create({
+            data: {
+              id: game.match_id,
+              player_ids: game.players,
+            },
+          })
+        }
+      }
+    })
+    console.log(gamesForDatabase)
     // games = [...games, ...response.items]
     // page++
     // }
@@ -44,6 +80,23 @@ export const Games = async () => {
             } else {
               const matchId = await getDotabuffUrl(match.match_id)
               match.dotabuffId = matchId // Add dotabuffId property to the match object
+
+              const gameToUpdate = await prisma.games.findUnique({
+                where: {
+                  id: match.match_id,
+                },
+              })
+              if (gameToUpdate && match.dotabuffId !== '') {
+                await prisma.games.update({
+                  where: {
+                    id: String(match.match_id),
+                  },
+                  data: {
+                    gameId: String(match.dotabuffId),
+                  },
+                })
+              }
+
               const gameStartedAt = dayjs(1000 * match.started_at).format(
                 'DD/MM/YYYY HH:mm',
               )

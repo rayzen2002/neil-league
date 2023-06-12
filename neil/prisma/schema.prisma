@@ -22,6 +22,7 @@ model Player {
 
 model Games {
   id         String   @id @unique
+  gameId     String?  @unique
   player_ids String[]
   players    Player[] @relation("GamesToPlayer")
 }
