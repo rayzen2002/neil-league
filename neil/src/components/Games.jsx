@@ -25,7 +25,7 @@ export const Games = async () => {
     // }
     games = await response.items
 
-    // console.log(games)
+    console.log(games)
     // games = [...games, ...response.items]
     // page++
     // }

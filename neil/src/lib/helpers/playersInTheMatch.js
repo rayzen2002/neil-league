@@ -9,6 +9,7 @@ async function playersInTheMatch(matchId) {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
           Accept: 'application/json',
+          'Cache-Control': 'force-cash',
         },
       },
     )
