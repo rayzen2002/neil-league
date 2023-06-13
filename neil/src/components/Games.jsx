@@ -63,6 +63,13 @@ export const Games = async () => {
     // games = [...games, ...response.items]
     // page++
     // }
+    await prisma.games.deleteMany({
+      where: {
+        player_ids: {
+          isEmpty: true,
+        },
+      },
+    })
   } catch (error) {
     console.error(`Erro ao fazer requisicao : ${error}`)
   }
