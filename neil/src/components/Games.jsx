@@ -31,24 +31,14 @@ export const Games = async () => {
   // }
   games = await response.items
   const finishedGames = games.filter((game) => game.status === 'FINISHED')
-  const gamesForDatabase = finishedGames.map((game) => {
-    if (game.status === 'FINISHED') {
-      matchIds.push(game.match_id)
-      return {
-        match_id: game.match_id,
-        players: game.teams.faction1.roster
-          .map((player) => {
-            return player.player_id
-          })
-          .concat(
-            game.teams.faction2.roster.map((player) => {
-              return player.player_id
-            }),
-          ),
-      }
-    }
-    return null
+  finishedGames.forEach((game) => {
+    matchIds.push(game.match_id)
+
+    game.players = game.teams.faction1.roster
+      .map((player) => player.player_id)
+      .concat(game.teams.faction2.roster.map((player) => player.player_id))
   })
+  const gamesForDatabase = finishedGames
   gamesForDatabase.forEach(async (game) => {
     if (game) {
       const gameDatabase = await prisma.games.findUnique({
