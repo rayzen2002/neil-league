@@ -61,6 +61,9 @@ export const Games = async () => {
   // }
 
   const idsTransformed = await getDotabuffUrl(matchIds)
+  console.log(games)
+  console.log(finishedGames)
+  console.log(gamesForDatabase)
   return (
     <div>
       <ul>
