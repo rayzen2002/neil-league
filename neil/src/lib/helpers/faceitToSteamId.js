@@ -8,8 +8,8 @@ async function faceitToSteamId(playersId) {
         headers: {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
           Accept: 'application/json',
-          'Cache-Control': 'force-cash',
         },
+        cache: 'force-cache',
       },
     )
     const playerData = await res.json()

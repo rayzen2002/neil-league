@@ -6,6 +6,7 @@ async function getDateOfTheMatch(matchId) {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
         Accept: 'application/json',
       },
+      cache: 'force-cache',
     },
   )
   const match = await res.json()

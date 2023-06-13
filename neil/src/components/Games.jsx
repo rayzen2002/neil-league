@@ -8,6 +8,7 @@ const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 
 export const Games = async () => {
   let games = []
+  const matchIds = []
   // const page = 1
   const pageSize = 50
   try {
@@ -19,6 +20,7 @@ export const Games = async () => {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
           Accept: 'application/json',
         },
+        cache: 'force-cache',
       },
     )
     const response = await res.json()
@@ -29,6 +31,7 @@ export const Games = async () => {
     games = await response.items
     const gamesForDatabase = games.map((game) => {
       if (game.status === 'FINISHED') {
+        matchIds.push(game.match_id)
         return {
           match_id: game.match_id,
           players: game.teams.faction1.roster
@@ -61,20 +64,19 @@ export const Games = async () => {
         }
       }
     })
-    console.log(gamesForDatabase)
     // games = [...games, ...response.items]
     // page++
     // }
   } catch (error) {
     console.error(`Erro ao fazer requisicao : ${error}`)
   }
+  console.log(matchIds)
 
   return (
     <div>
       <ul>
         {games && games.length > 0 ? (
           games.map(async (match) => {
-            // console.log(match.match_id)
             if (match.status === 'CANCELLED') {
               return null
             } else {
@@ -86,7 +88,7 @@ export const Games = async () => {
                   id: match.match_id,
                 },
               })
-              if (gameToUpdate && match.dotabuffId !== '') {
+              if (gameToUpdate && match.dotabuffId === '') {
                 await prisma.games.update({
                   where: {
                     id: String(match.match_id),
