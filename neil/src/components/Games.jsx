@@ -21,6 +21,9 @@ export const Games = async () => {
           Accept: 'application/json',
         },
         cache: 'force-cache',
+        next: {
+          revalidate: 60 * 60 * 1,
+        },
       },
     )
     const response = await res.json()
