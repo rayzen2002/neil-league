@@ -21,6 +21,9 @@ export const Games = async () => {
           Accept: 'application/json',
         },
         cache: 'force-cache',
+        next: {
+          revalidate: 60 * 60 * 1,
+        },
       },
     )
     const response = await res.json()
@@ -29,10 +32,10 @@ export const Games = async () => {
     //   break // No more games, exit the loop
     // }
     games = await response.items
-    games.map(async (game) => {
+    const gamesForDatabase = games.map((game) => {
       if (game.status === 'FINISHED') {
         matchIds.push(game.match_id)
-        const xd = {
+        return {
           match_id: game.match_id,
           players: game.teams.faction1.roster
             .map((player) => {
@@ -44,6 +47,11 @@ export const Games = async () => {
               }),
             ),
         }
+      }
+      return null
+    })
+    gamesForDatabase.forEach(async (game) => {
+      if (game) {
         const gameDatabase = await prisma.games.findUnique({
           where: {
             id: game.match_id,
@@ -52,24 +60,16 @@ export const Games = async () => {
         if (!gameDatabase) {
           await prisma.games.create({
             data: {
-              id: xd.match_id,
-              player_ids: xd.players,
+              id: game.match_id,
+              player_ids: game.players,
             },
           })
         }
       }
     })
-
     // games = [...games, ...response.items]
     // page++
     // }
-    await prisma.games.deleteMany({
-      where: {
-        player_ids: {
-          isEmpty: true,
-        },
-      },
-    })
   } catch (error) {
     console.error(`Erro ao fazer requisicao : ${error}`)
   }
