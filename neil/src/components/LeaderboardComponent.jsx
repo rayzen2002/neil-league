@@ -23,9 +23,7 @@ export const LeaderboardComponent = async (props) => {
           Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
           Accept: 'application/json',
         },
-        next: {
-          revalidate: 30,
-        },
+        cache: 'force-cache',
       })
       try {
         const response = await res.json()
