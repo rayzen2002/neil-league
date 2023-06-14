@@ -14,6 +14,7 @@ export const Games = async () => {
   const pageSize = 50
 
   // while (games.length < 50) {
+
   const res = await fetch(
     `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=${pageSize}`,
     {
@@ -61,9 +62,10 @@ export const Games = async () => {
   // }
 
   const idsTransformed = await getDotabuffUrl(matchIds)
-  console.log(games)
+  finishedGames.forEach((game, index) => {
+    game.dotabuffId = idsTransformed[index]
+  })
   console.log(finishedGames)
-  console.log(gamesForDatabase)
   return (
     <div>
       <ul>
@@ -73,7 +75,7 @@ export const Games = async () => {
               return null
             } else {
               // const matchId = await getDotabuffUrl(match.match_id)
-              match.dotabuffId = idsTransformed[index] // Add dotabuffId property to the match object
+              // Add dotabuffId property to the match object
 
               const gameToUpdate = await prisma.games.findUnique({
                 where: {
