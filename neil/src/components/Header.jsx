@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { Home } from 'lucide-react'
+import { Dices, Home } from 'lucide-react'
 import Image from 'next/image'
 import SignIn from './SignIn'
 import Profile from './Profile'
@@ -18,6 +18,21 @@ export default function Header() {
               <Home className="pointer-events-none" />
             </div>
             <p> HOME</p>
+          </a>
+        </div>
+        <div className="border-12  flex h-12 w-48 items-center   rounded-full bg-blitz-400 delay-100 hover:bg-blitz-200">
+          <a
+            href={
+              isAuthenticated
+                ? '/profile'
+                : 'https://accounts.faceit.com/accounts?response_type=code&client_id=95e4faf2-db0d-47fa-9043-3a07f9547689&redirect_popup=true'
+            }
+            className="flex items-center justify-center gap-4  "
+          >
+            <div className=" flex h-12 w-12 items-center justify-center rounded-full bg-blitz-300">
+              <Dices className="pointer-events-none" />
+            </div>
+            <p> Profile</p>
           </a>
         </div>
       </div>
