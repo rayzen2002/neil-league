@@ -8,74 +8,83 @@ const { getDotabuffUrl } = require('@/lib/getDotabuffUrl')
 
 export const Games = async () => {
   let games = []
-
   const matchIds = []
   // const page = 1
   const pageSize = 50
-
-  // while (games.length < 50) {
-
-  const res = await fetch(
-    `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=${pageSize}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-        Accept: 'application/json',
-      },
-      cache: 'force-cache',
-    },
-  )
-  const response = await res.json()
-
-  // if (response.items.length === 0) {
-  //   break // No more games, exit the loop
-  // }
-  games = await response.items
-  const finishedGames = games.filter((game) => game.status === 'FINISHED')
-  finishedGames.forEach((game) => {
-    matchIds.push(game.match_id)
-
-    game.players = game.teams.faction1.roster
-      .map((player) => player.player_id)
-      .concat(game.teams.faction2.roster.map((player) => player.player_id))
-  })
-  const gamesForDatabase = finishedGames
-  gamesForDatabase.forEach(async (game) => {
-    if (game) {
-      const gameDatabase = await prisma.games.findUnique({
-        where: {
-          id: game.match_id,
+  try {
+    // while (games.length < 50) {
+    const res = await fetch(
+      `https://open.faceit.com/data/v4/hubs/${process.env.NEXT_PUBLIC_HUB_ID}/matches?limit=${pageSize}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+          Accept: 'application/json',
         },
-      })
-      if (!gameDatabase) {
-        await prisma.games.create({
-          data: {
+        cache: 'force-cache',
+        next: {
+          revalidate: 60 * 60 * 1,
+        },
+      },
+    )
+    const response = await res.json()
+
+    // if (response.items.length === 0) {
+    //   break // No more games, exit the loop
+    // }
+    games = await response.items
+    const gamesForDatabase = games.map((game) => {
+      if (game.status === 'FINISHED') {
+        matchIds.push(game.match_id)
+        return {
+          match_id: game.match_id,
+          players: game.teams.faction1.roster
+            .map((player) => {
+              return player.player_id
+            })
+            .concat(
+              game.teams.faction2.roster.map((player) => {
+                return player.player_id
+              }),
+            ),
+        }
+      }
+      return null
+    })
+    gamesForDatabase.forEach(async (game) => {
+      if (game) {
+        const gameDatabase = await prisma.games.findUnique({
+          where: {
             id: game.match_id,
-            player_ids: game.players,
           },
         })
+        if (!gameDatabase) {
+          await prisma.games.create({
+            data: {
+              id: game.match_id,
+              player_ids: game.players,
+            },
+          })
+        }
       }
-    }
-  })
-  // games = [...games, ...response.items]
-  // page++
-  // }
+    })
+    // games = [...games, ...response.items]
+    // page++
+    // }
+  } catch (error) {
+    console.error(`Erro ao fazer requisicao : ${error}`)
+  }
+  console.log(matchIds)
 
-  const idsTransformed = await getDotabuffUrl(matchIds)
-  finishedGames.forEach((game, index) => {
-    game.dotabuffId = idsTransformed[index]
-  })
-  console.log(finishedGames)
   return (
     <div>
       <ul>
-        {finishedGames && finishedGames.length > 0 ? (
-          finishedGames.map(async (match, index) => {
+        {games && games.length > 0 ? (
+          games.map(async (match) => {
             if (match.status === 'CANCELLED') {
               return null
             } else {
-              // const matchId = await getDotabuffUrl(match.match_id)
-              // Add dotabuffId property to the match object
+              const matchId = await getDotabuffUrl(match.match_id)
+              match.dotabuffId = matchId // Add dotabuffId property to the match object
 
               const gameToUpdate = await prisma.games.findUnique({
                 where: {

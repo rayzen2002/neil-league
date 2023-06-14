@@ -5,18 +5,14 @@ const { playersInTheMatch } = require('./helpers/playersInTheMatch')
 
 require('dotenv').config()
 
-async function getDotabuffUrl(matchIds) {
-  const urls = []
-
-  for (const matchId of matchIds) {
-    const playersId = await playersInTheMatch(matchId)
-    const steamIds = await faceitToSteamId(playersId)
-    const convertedSteamIds = convertSteam64ToSteam32(steamIds)
-    const url = await findMatch(convertedSteamIds)
-    urls.push(url)
-  }
-
-  return urls
+async function getDotabuffUrl(matchId) {
+  const playersId = await playersInTheMatch(matchId)
+  // console.log(playersId)
+  const steamIds = await faceitToSteamId(playersId)
+  const convertedSteamIds = convertSteam64ToSteam32(steamIds)
+  const url = await findMatch(convertedSteamIds)
+  console.log(url)
+  return url
 }
 
 module.exports = { getDotabuffUrl }
