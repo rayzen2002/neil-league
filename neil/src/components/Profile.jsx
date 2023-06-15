@@ -20,7 +20,7 @@ export default function Profile() {
           className="h-16 w-16 rounded-full"
         />
       </div>
-      <p className=" max-w-[120px] text-lg  leading-snug">
+      <p className=" max-w-[120px] text-xl  leading-snug md:text-lg ">
         {nickname}
         <a
           href="https://neildota.vercel.app/api/auth/logout"

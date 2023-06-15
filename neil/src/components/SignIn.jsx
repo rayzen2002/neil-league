@@ -10,7 +10,7 @@ export default function SignIn() {
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-400 ">
           <User className="h-12 w-12 text-gray-500 " />
         </div>
-        <p className=" max-w-[120px] text-lg  leading-snug">
+        <p className=" max-w-[120px] text-xl  leading-snug  md:text-lg">
           <span className="underline">Faca login</span> usando a Faceit
         </p>
       </a>

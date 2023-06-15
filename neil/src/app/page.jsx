@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="mt-16 h-[500] w-full bg-blitz-100 px-6">
+    <div className="mt-16  w-full bg-blitz-100 ">
       <h1 className="py-16 text-center font-alt text-5xl font-bold leading-snug">
         Seja bem-vindo ao site da{' '}
         <a
@@ -11,7 +11,7 @@ export default function Home() {
         </a>{' '}
         Inhouse League!
       </h1>
-      <p className=" px-28 pb-20 text-center  font-sans text-xl leading-relaxed">
+      <p className=" px-2 pb-20 text-center font-sans text-xl leading-relaxed  sm:px-4 md:px-14 lg:px-28">
         Somos uma liga de Dota 2 que começou como uma brincadeira entre amigos,
         mas rapidamente se tornou a forma mais divertida de jogar Dota. Ao longo
         dos anos, nos tornamos a liga mais duradoura de Dota 2 do mundo, com 12
