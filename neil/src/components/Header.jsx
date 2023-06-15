@@ -18,7 +18,7 @@ export default function Header() {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500">
                 <Home className="pointer-events-none" />
               </div>
-              <p className="text-5xl md:text-3xl lg:text-base"> HOME</p>
+              <p className="text-3xl md:text-2xl lg:text-base"> HOME</p>
             </a>
           </div>
           <div className="border-12 flex items-center rounded-full bg-blitz-400 delay-100 hover:bg-blitz-200 md:w-48">
@@ -33,7 +33,7 @@ export default function Header() {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blitz-300">
                 <Dices className="pointer-events-none" />
               </div>
-              <p className="text-5xl md:text-3xl lg:text-base"> Profile</p>
+              <p className="text-3xl md:text-2xl lg:text-base"> Profile</p>
             </a>
           </div>
         </div>

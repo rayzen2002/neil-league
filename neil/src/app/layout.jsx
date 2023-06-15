@@ -24,31 +24,31 @@ export default function RootLayout({ children }) {
       <body
         className={`${roboto.variable} ${baiJamjuree.variable} bg-blitz-100 font-sans text-gray-100`}
       >
-        <main className="bg-zinc-900">
+        <main className="bg-zinc-900 min-w-100">
           <Header />
-          <div className="flex min-h-screen flex-col md:grid md:grid-cols-8">
+          <div className="flex min-h-screen flex-col lg:grid lg:grid-cols-8">
             {/* Sidebar */}
-            <div className="just col-span-1 flex min-w-max flex-col items-center bg-blitz-100 ">
-              <div className=" flex flex-col items-start justify-start gap-3 font-alt text-lg  md:py-16">
-                <div className="flex w-full  gap-1 hover:bg-orange-500 xl:gap-6">
+            <div className="col-span-1 flex  flex-col  items-center bg-blitz-100 ">
+              <div className="text-2lg flex w-full  flex-row flex-wrap items-start justify-between gap-3 px-2 py-4 font-alt lg:flex-col lg:py-16  lg:text-xl">
+                <div className="flex  gap-1 hover:bg-orange-500 xl:gap-6">
                   <Gamepad2 />
                   <a href="/jogos" className=" ">
                     Jogos
                   </a>
                 </div>
-                <div className="flex w-full  gap-1 hover:bg-orange-500 xl:gap-6">
+                <div className="flex w-auto gap-1  hover:bg-orange-500 lg:w-full xl:gap-6">
                   <Crown />
                   <a href="/leaderboards" className=" ">
                     Leaderboard
                   </a>
                 </div>
-                <div className="flex w-full  gap-1 hover:bg-orange-500 xl:gap-6">
+                <div className="flex w-auto gap-1  hover:bg-orange-500 lg:w-full xl:gap-6">
                   <Skull />
                   <a href="/jogadores" className=" ">
                     Jogadores
                   </a>
                 </div>
-                <div className="flex w-full  gap-1 hover:bg-orange-500 xl:gap-6">
+                <div className="flex w-auto gap-1  hover:bg-orange-500 lg:w-full xl:gap-6">
                   <Swords />
                   <a href="/arena" className=" ">
                     Arena
