@@ -4,7 +4,7 @@ import Image from 'next/image'
 import SignIn from './SignIn'
 import Profile from './Profile'
 
-export default function Header() {
+export default async function Header() {
   const isAuthenticated = cookies().has('token')
   return (
     <div className="flex w-full flex-col items-center justify-start bg-blitz-100 py-0 font-alt font-bold md:justify-between lg:flex-row">
@@ -13,12 +13,12 @@ export default function Header() {
         {isAuthenticated ? <Profile /> : <SignIn />}
         <div className="flex items-center gap-4">
           {/* Botao de HOME */}
-          <div className="border-12 flex items-center rounded-full bg-blitz-400 delay-100 hover:bg-orange-500 md:w-48">
+          <div className="border-12 flex items-center rounded-full bg-blitz-400 pr-4 delay-100 hover:bg-orange-500 md:w-48 md:pr-0 lg:pr-0">
             <a href="/" className="flex items-center justify-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500">
                 <Home className="pointer-events-none" />
               </div>
-              <p className="text-3xl md:text-2xl lg:text-base"> HOME</p>
+              <p className="text-2xl md:text-xl lg:text-base"> HOME</p>
             </a>
           </div>
           <div className="border-12 flex items-center rounded-full bg-blitz-400 delay-100 hover:bg-blitz-200 md:w-48">
@@ -33,7 +33,10 @@ export default function Header() {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blitz-300">
                 <Dices className="pointer-events-none" />
               </div>
-              <p className="text-3xl md:text-2xl lg:text-base"> Profile</p>
+              <p className="pr-4 text-2xl md:pr-0 md:text-xl lg:pr-0 lg:text-base">
+                {' '}
+                Profile
+              </p>
             </a>
           </div>
         </div>
@@ -44,13 +47,13 @@ export default function Header() {
           width={200}
           height={200}
           alt="Neil hat"
-          className="hidden text-orange-500 lg:block lg:h-[200] lg:w-[200]"
+          className="hidden lg:flex lg:h-14 "
         />
         <Image
           src="/logo.svg"
           width={32 * 4}
-          height={75.25}
-          className="hidden lg:block lg:h-20 lg:w-64"
+          height={80}
+          className="hidden  lg:flex lg:h-20 lg:w-64"
           alt="Neil"
         />
       </div>
