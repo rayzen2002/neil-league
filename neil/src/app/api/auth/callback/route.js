@@ -35,7 +35,17 @@ export async function GET(request) {
       headers,
     })
 
-    const { id_token, refresh_token } = tokenResponse.data
+    const { id_token, access_token, refresh_token } = tokenResponse.data
+    const queue = await api.get(
+      'https://api.faceit.com/queue/v1/player/617d964cf7d3e547d2f29574?limit=15',
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
+    )
+    const queueData = await queue.data
+    console.log(queueData)
     const {
       guid,
       picture,
