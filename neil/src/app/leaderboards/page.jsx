@@ -8,6 +8,7 @@ export default function Leaderboards() {
   const [showLeaderBoard, setShowLeaderBoard] = useState(false)
   const handleSelectChange = (e) => {
     setSelectedSeason(e.target.value)
+    console.log(selectedSeason)
   }
   const handleButtonClick = (e) => {
     e.preventDefault()
