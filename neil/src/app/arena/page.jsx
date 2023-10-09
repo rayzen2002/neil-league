@@ -19,7 +19,7 @@ export default function Arena() {
   useEffect(() => {
     let fetchedPlayers = []
     let page = 1
-    const pageSize = 100
+    const pageSize = 50
 
     const fetchPlayers = () => {
       fetch(
@@ -42,6 +42,7 @@ export default function Arena() {
             page++
             fetchPlayers()
           }
+          
         })
         .catch((error) => {
           console.error(`Erro ao fazer requisição: ${error}`)
