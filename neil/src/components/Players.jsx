@@ -1,7 +1,7 @@
 export const Players = async () => {
   let players = []
   let page = 1
-  const pageSize = 100
+  const pageSize = 50
   try {
     while (true) {
       const res = await fetch(
@@ -17,7 +17,8 @@ export const Players = async () => {
         },
       )
       const response = await res.json()
-      if (response.items.length === 0) {
+      console.log(response)
+      if (response.items?.length === 0) {
         break // No more players, exit the loop
       }
       players = [...players, ...response.items]
