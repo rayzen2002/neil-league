@@ -69,12 +69,17 @@ export const LeaderboardComponent = async (props) => {
                         />
                       ) : (
                         <img
-                          alt="avatar"
-                          width={30}
-                          height={30}
-                          src={items.player.avatar}
-                          className="h-20 w-20 rounded-full border-4 border-orange-500"
-                        />
+                        alt="avatar"
+                        width={30}
+                        height={30}
+                        src={items.player.avatar !== '' ? items.player.avatar : '/neil.svg'}
+                        className="h-20 w-20 rounded-full border-4 border-orange-500"
+                      />
+              //           <img
+              //   src={player.avatar !== '' ? player.avatar : '/neil.svg'}
+              //   className="flex  h-40 w-40 rounded-xl border-4 border-orange-500 bg-orange-500"
+              //   alt="avatar"
+              // />
                       )}
 
                       <p className="text-2xl">
