@@ -55,6 +55,7 @@ export default function Leaderboards() {
             <option value="13">Season 13</option>
             <option value="14">Season 14</option>
             <option value="15">Season 15</option>
+            <option value="15">Season 16</option>
             {/* Add more options for different seasons */}
           </select>
           <button className="rounded-xl  border-blitz-400 bg-blitz-400 p-2 text-3xl hover:bg-gray-200">
