@@ -55,33 +55,35 @@ export const LeaderboardComponent = async (props) => {
               winrate = winrate.toFixed(2)
             }
             return (
-              <div key={items.player.user_id}>
+              <div key={items.player.user_id} >
                 <li className="m-auto  mt-4  flex w-2/4 flex-col items-start justify-center gap-y-2 rounded-xl border-4  bg-blitz-400 pb-6">
-                  <div className=" mx-2 flex w-full items-center justify-start gap-12">
-                    <p className="flex items-start justify-start text-start text-5xl ">
-                      {items.position} º
+                  <div className=" flex m-4 items-center ">
+                    <p className="text-3xl">
+                      {items.position}º
                     </p>
                     <div className="flex items-center gap-1">
-                      {items.player.avatar === '' ? (
-                        <User
+                  
+                    {items.player.avatar === undefined ? (
+                      <div className='px-4'>
+                        <img
                           alt="avatar"
+                          width={30}
+                          height={30}
+                          src='/neilFaceit.jpg'
                           className="h-20 w-20 rounded-full border-4 border-orange-500 "
                         />
-                      ) : (
+                      </div>
+                    ) : (
+                      <div className='px-4'>
                         <img
-                        alt="avatar"
-                        width={30}
-                        height={30}
-                        src={items.player.avatar !== '' ? items.player.avatar : '/neil.svg'}
-                        className="h-20 w-20 rounded-full border-4 border-orange-500"
-                      />
-              //           <img
-              //   src={player.avatar !== '' ? player.avatar : '/neil.svg'}
-              //   className="flex  h-40 w-40 rounded-xl border-4 border-orange-500 bg-orange-500"
-              //   alt="avatar"
-              // />
-                      )}
-
+                          alt="avatar"
+                          width={30}
+                          height={30}
+                          src={items.player.avatar}
+                          className="h-20 w-20 rounded-full border-4 border-orange-500"
+                        />
+                      </div>
+                    )}
                       <p className="text-2xl">
                         <span className="font-bold text-orange-500">
                           {items.player.nickname}
@@ -91,14 +93,14 @@ export const LeaderboardComponent = async (props) => {
                   </div>
                   <div className=" mx-12 grid  w-full grid-cols-2 ">
                     <div>
-                      <p>Partidas Jogadas : {items.played}</p>
-                      <p className="text-green-700">Ganhou : {items.won}</p>
-                      <p style={{ color: 'red' }}>Perdeu : {items.lost}</p>
-                      <p>Winrate : {`${winrate} %`}</p>
+                      <p className='text-xl'>Partidas Jogadas : {items.played}</p>
+                      <p className="text-green-700 text-xl">Ganhou : {items.won}</p>
+                      <p style={{ color: 'red' }} className='text-xl'>Perdeu : {items.lost}</p>
+                      <p className='text-xl'>Winrate : {`${winrate} %`}</p>
                     </div>
                     <div className="flex flex-col items-start justify-start">
-                      <p>Pontos: {items.points}</p>
-                      <div className="flex gap-1">
+                      <p className='text-xl'>Pontos: {items.points}</p>
+                      <div className="flex gap-1 text-xl">
                         Streak :{' '}
                         {items.current_streak < 4 ? (
                           <p>+ {items.current_streak}</p>

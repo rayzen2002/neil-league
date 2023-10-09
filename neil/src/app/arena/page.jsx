@@ -79,113 +79,120 @@ export default function Arena() {
   }
 
   const handleButton = () => {
-    const lowercaseInputA = inputA.toLowerCase()
-    const lowercaseInputB = inputB.toLowerCase()
-    setEnemyName(inputB.toUpperCase())
-    setName(inputA.toUpperCase())
-
-    // playerA data fetching
-    if (
-      players.some(
-        (player) => player.nickname.toLowerCase() === lowercaseInputA,
-      )
-    ) {
-      const playerA = players.filter(
-        (player) => player.nickname.toLowerCase() === lowercaseInputA,
-      )
-      const playerAFaceitId = playerA.map((player) => player.user_id)
-      console.log(playerAFaceitId)
-
-      fetch(`https://open.faceit.com/data/v4/players/${playerAFaceitId}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-          Accept: 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPlayerDataA(data.steam_id_64)
-          console.log(playerDataA)
+    const lowercaseInputA = inputA.toLowerCase();
+    const lowercaseInputB = inputB.toLowerCase();
+    setEnemyName(inputB.toUpperCase());
+    setName(inputA.toUpperCase());
+  
+    // Define promises for fetching playerA and playerB data
+    const fetchPlayerA = new Promise((resolve, reject) => {
+      if (players.some((player) => player.nickname.toLowerCase() === lowercaseInputA)) {
+        const playerA = players.find((player) => player.nickname.toLowerCase() === lowercaseInputA);
+        const playerAFaceitId = playerA.user_id;
+        fetch(`https://open.faceit.com/data/v4/players/${playerAFaceitId}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+            Accept: 'application/json',
+          },
         })
-    } else {
-      alert(`Jogador: ${inputA} nao encontrado`)
-      setInputA('')
-      setIsLoading(false)
-      setWin(0)
-      setLose(0)
-      setIsDataFetched(false)
-      setPlayerDataA('')
-    }
-
-    // playerB data fetching
-    if (
-      players.some(
-        (player) => player.nickname.toLowerCase() === lowercaseInputB,
-      )
-    ) {
-      const playerB = players.filter(
-        (player) => player.nickname.toLowerCase() === lowercaseInputB,
-      )
-      const playerBFaceitId = playerB.map((player) => player.user_id)
-      console.log(playerBFaceitId)
-
-      fetch(`https://open.faceit.com/data/v4/players/${playerBFaceitId}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
-          Accept: 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPlayerDataB(data.steam_id_64)
-          console.log(playerDataB)
+          .then((res) => res.json())
+          .then((data) => {
+            resolve(data.steam_id_64);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        reject(`Jogador: ${inputA} nao encontrado`);
+      }
+    });
+  
+    const fetchPlayerB = new Promise((resolve, reject) => {
+      if (players.some((player) => player.nickname.toLowerCase() === lowercaseInputB)) {
+        const playerB = players.find((player) => player.nickname.toLowerCase() === lowercaseInputB);
+        const playerBFaceitId = playerB.user_id;
+        fetch(`https://open.faceit.com/data/v4/players/${playerBFaceitId}`, {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`,
+            Accept: 'application/json',
+          },
         })
-    } else {
-      alert(`Jogador: ${inputB} nao encontrado`)
-      setInputB('')
-      setIsLoading(false)
-      setWin(0)
-      setLose(0)
-      setIsDataFetched(false)
-      setPlayerDataB('')
-    }
-  }
+          .then((res) => res.json())
+          .then((data) => {
+            resolve(data.steam_id_64);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        reject(`Jogador: ${inputB} nao encontrado`);
+      }
+    });
+  
+    // Wait for both promises to resolve
+    Promise.all([fetchPlayerA, fetchPlayerB])
+      .then(([playerDataA, playerDataB]) => {
+        setPlayerDataA(playerDataA);
+        setPlayerDataB(playerDataB);
+        setIsDataFetched(true);
+      })
+      .catch((error) => {
+        alert(error);
+        setInputA('');
+        setInputB('');
+        setIsLoading(false);
+        setWin(0);
+        setLose(0);
+        setIsDataFetched(false);
+        setPlayerDataA('');
+        setPlayerDataB('');
+      });
+  };
+  
 
   useEffect(() => {
     if (playerDataA && playerDataB) {
-      const steamA = convertSteam64ToSteam32(playerDataA)
-      const steamB = convertSteam64ToSteam32(playerDataB)
-      console.log(`Aqui esta: ${playerDataA} B: ${playerDataB}`)
-      console.log(`Aqui esta: ${steamA} B: ${steamB}`)
-      fetch(
-        `https://api.opendota.com/api/players/${steamA}/matches?api_key=${process.env.NEXT_PUBLIC_API_KEY_OPEN_DOTA}&included_account_id=${steamB}&game_mode=2&lobby_type=1`,
-      )
+      const steamA = convertSteam64ToSteam32(playerDataA);
+      const steamB = convertSteam64ToSteam32(playerDataB);
+    
+      // Fetch matches for playerA
+      fetch(`https://api.opendota.com/api/players/${steamA}/matches?api_key=${process.env.NEXT_PUBLIC_API_KEY_OPEN_DOTA}`)
         .then((res) => res.json())
-        .then((data) => {
-          const winCount = data.reduce((count, match) => {
-            const playerSlot = match.player_slot
-            const radiantWin = match.radiant_win
-            const isRadiantPlayer =
-              (playerSlot < 128 && radiantWin) ||
-              (playerSlot >= 128 && !radiantWin)
-            if (isRadiantPlayer) {
-              return count + 1
-            }
-            return count
-          }, 0)
-
-          setWin(winCount)
-          if (winCount > 0) {
-            setLose(data.length - winCount)
-          }
-          setIsDataFetched(true)
+        .then((matchesA) => {
+          // Fetch matches for playerB
+          fetch(`https://api.opendota.com/api/players/${steamB}/matches?api_key=${process.env.NEXT_PUBLIC_API_KEY_OPEN_DOTA}`)
+            .then((res) => res.json())
+            .then((matchesB) => {
+              // Find matches where playerA and playerB were on opposite teams
+              const matchesAgainstEachOther = matchesA.filter((matchA) => {
+                return matchesB.some((matchB) => {
+                  return matchA.match_id === matchB.match_id &&
+                    ((matchA.player_slot < 128 && matchB.player_slot >= 128) || (matchA.player_slot >= 128 && matchB.player_slot < 128));
+                });
+              });
+    
+              // Calculate winrate for playerA against playerB
+              const winCount = matchesAgainstEachOther.reduce((count, match) => {
+                if ((match.player_slot < 128 && match.radiant_win) || (match.player_slot >= 128 && !match.radiant_win)) {
+                  return count + 1; // playerA won
+                }
+                return count; // playerB won
+              }, 0);
+    
+              setWin(winCount);
+              setLose(matchesAgainstEachOther.length - winCount);
+              setIsDataFetched(true);
+            })
+            .catch((error) => {
+              console.error(`Error fetching matches data for playerB: ${error}`);
+            });
         })
         .catch((error) => {
-          console.error(`Error fetching matches data: ${error}`)
+          console.error(`Error fetching matches data for playerA: ${error}`);
         })
         .finally(() => {
-          setIsLoading(false)
-        })
+          setIsLoading(false);
+        });
     }
   }, [playerDataA, playerDataB, isDataFetched])
   console.log(`Ganhou: ${win} Perdeu: ${lose}`)
@@ -253,7 +260,7 @@ export default function Arena() {
                   </div>
                   <div className="mx-auto flex w-full flex-col ">
                     <p className="text-2xl text-green-500">
-                      Ganhou {win} partidas
+                      Você Ganhou {win} partidas
                     </p>
                     <p className="text-2xl text-red-200">e Perdeu {lose} </p>
                     <p className="text-bold text-3xl text-green-500">
@@ -288,7 +295,7 @@ export default function Arena() {
                   </div>
                   <div className="mx-auto flex w-full flex-col ">
                     <p className="text-2xl text-green-500">
-                      Ganhou {win} partidas
+                    Você Ganhou {win} partidas
                     </p>
                     <p className="text-2xl text-red-200">e Perdeu {lose} </p>
                     <p className="text-bold text-3xl text-green-500">

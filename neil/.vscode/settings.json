@@ -214,5 +214,6 @@
   },
   "window.commandCenter": true,
   "git.openRepositoryInParentFolders": "always",
-  "window.zoomLevel": 1
+  "window.zoomLevel": 1,
+  "workbench.editor.empty.hint": "hidden"
 }
